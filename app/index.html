@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en" ng-app="cellar">
+<head>
+  <meta charset="utf-8">
+  <title>Ajaxdemo Wine Celllar</title>
+  <link rel="stylesheet" href="css/cellar.css"/>
+</head>
+<body>
+  <div id="header">
+    Wine Cellar
+    <button ng:click="addWine()">New Wine</button>
+  </div>
+
+  <div id="sidebar" ng:include src="'partials/wine-list.html'"></div>
+
+  <div id="content">
+    <ng:view></ng:view>
+  </div>
+
+  <script src="lib/angular/angular.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/services.js"></script>
+  <script src="js/controllers.js"></script>
+  <script src="js/filters.js"></script>
+  <script src="js/directives.js"></script>
+</body>
+</html>
