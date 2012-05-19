@@ -1,0 +1,11 @@
+Ajax demo application implemented using AngularJS
+
+It is based on the AngularJS sekeleton (https://github.com/angular/angular-seed).
+
+I started with the Wine Cellar application taken from here.
+http://coenraets.org/blog/2012/02/sample-application-with-angular-js/
+
+I had to exchange the PHP backend to a Python/mongodb one.
+
+Another important thing I had to add is testing.
+
