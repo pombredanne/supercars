@@ -9,3 +9,14 @@ I had to exchange the PHP backend to a Python/mongodb one.
 
 Another important thing I had to add is testing.
 
+
+
+Run ajaxdemo
+------------
+
+I personaly use Python to serve the demo (if you are a node.js user: node scritps/web-server.js):
+cd app
+python -m SimpleHTTPServer
+
+http://localhost:8000/index.html
+
