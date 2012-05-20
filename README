@@ -1,3 +1,6 @@
+Ajax application ajaxdemo
+=========================
+
 Ajax demo application implemented using AngularJS
 
 It is based on the AngularJS sekeleton (https://github.com/angular/angular-seed).
@@ -10,13 +13,34 @@ I had to exchange the PHP backend to a Python/mongodb one.
 Another important thing I had to add is testing.
 
 
+Restful webserver restserver
+============================
+
+For demonstration I wrote a small webserver based on SimpleHTTPServer. This server is used to both serve the restful webservice and the application itself in order to comply with the same origin policy of the browsers.
+
+
+Interface for a restful webservice
+----------------------------------
+
+To create a resource on the server, use POST.
+To retrieve a resource, use GET.
+To change the state of a resource or to update it, use PUT.
+To remove or delete a resource, use DELETE.
+
+This means using the HTTP protocol as it is intended.
+
+
+Installing and running the demo
+-------------------------------
+
+All you need is a Python installation and running mongodb server listening on port 27017.
+
 
 Run ajaxdemo
 ------------
 
-I personaly use Python to serve the demo (if you are a node.js user: node scritps/web-server.js):
 cd app
-python -m SimpleHTTPServer
+python ../scripts/restserver.py
 
 http://localhost:8000/index.html
 

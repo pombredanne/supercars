@@ -8,8 +8,9 @@
 
 angular.module('cellar.services', ['ngResource']).
     factory('Wine', function($resource) {
-        return $resource('cellar/:wineId.json', {}, {
-            query: {method: 'GET', params:{wineId:'wine'}, isArray:false}
+        return $resource('http://localhost:port/cellar/wines/:id', 
+            {'port': ':27080'},
+            {get_all: {method: 'GET', params:{'id': ''}, isArray:true}
         });
     });
 
