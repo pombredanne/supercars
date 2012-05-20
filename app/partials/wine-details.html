@@ -1,6 +1,6 @@
 <div class="form-left-col">
     <label>Id:</label>
-    <input name="id" type="text" value="{{ wine.id }}" disabled />
+    <input name="id" type="text" value="{{ wine._id }}" disabled />
 
     <label>Name:</label>
     <input type="text" name="wine.name" value="{{ wine.name }}" required/>
@@ -22,7 +22,7 @@
 </div>
 
 <div class="form-right-col">
-    <img width="250" height="300" src="pics/{{ wine.picture }}" onerror="this.src='pics/generic.jpg'"/>
+    <!--img width="250" height="300" src="pics/{{ wine.picture }}" onerror="this.src='pics/generic.jpg'"/>-->
     <label>Notes:</label>
     <textarea name="wine.description">{{ wine.description }}</textarea>
 </div>

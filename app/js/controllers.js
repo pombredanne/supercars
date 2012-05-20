@@ -23,8 +23,19 @@ function WineListCtrl($scope) {
 }
 
 
-function WineDetailsCtrl($scope) {
-    $scope.wine = {
-"id":"9","name":"BLOCK NINE"
-,"year":"2009","grapes":"Pinot Noir","country":"USA","region":"California","description":"With hints of ginger and spice, this wine makes an excellent complement to light appetizer and dessert fare for a holiday gathering.","picture":"block_nine.jpg"};
+
+
+function WineDetailsCtrl($scope, Wine) {
+//     $scope.wine = {
+// "id":"9","name":"BLOCK NINE"
+// ,"year":"2009","grapes":"Pinot Noir","country":"USA","region":"California","description":"With hints of ginger and spice, this wine makes an excellent complement to light appetizer and dessert fare for a holiday gathering.","picture":"block_nine.jpg"};
+    //$scope.wine = Wine.get();
+    //
+    //$scope.wine = Wine.get({wineId: 'wine'});
+
+    //$scope.wine = Wine.get({wineId: $routeParams.wineId}, function(wine) {
+    $scope.wine = Wine.query();
+    //$scope.wine = Wine.get({wineId: 'wine'}, function(wine) {
+        //$scope.mainImageUrl = phone.images[0];
+    //});
 }
