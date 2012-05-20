@@ -2,7 +2,7 @@
 
 
 // Declare app level module which depends on filters, and services
-var module = angular.module('cellar', ['cellar.filters', 'cellar.services', 'cellar.directives']).
+angular.module('cellar', ['cellar.filters', 'cellar.services', 'cellar.directives']).
     config(['$routeProvider', function($routeProvider) {
         $routeProvider.when('/wines', {template: 'partials/welcome.html',
             controller: WineListCtrl});
