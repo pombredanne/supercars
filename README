@@ -30,8 +30,8 @@ To remove or delete a resource, use DELETE.
 This means using the HTTP protocol as it is intended.
 
 
-Installing and running the demo
--------------------------------
+Installing ajaxdemo and tools
+-----------------------------
 
 All you need is a Python installation and running mongodb server listening on port 27017.
 
@@ -42,5 +42,16 @@ Run ajaxdemo
 cd app
 python ../scripts/restserver.py
 
-http://localhost:8000/index.html
 
+Populate the database
+---------------------
+
+Once the restserver is running you can populate the database using curl.
+../scirpts/populate.sh
+
+
+Visit the Wine Cellar demo app
+------------------------------
+
+Just point your browser to:
+http://localhost:8000/index.html

@@ -11,7 +11,6 @@ import urlparse
 import json
 from pymongo import Connection
 from pymongo.objectid import ObjectId
-from bson import json_util
 
 __version__ = "0.1"
 SERVER_HOST  = 'localhost'
