@@ -8,13 +8,17 @@ angular.module('cellar.services', ['ngResource']).
             //'id': '@_id'
             'list':   {method: 'GET', params:{'id': ''}, isArray:true},
             'create': {method: 'POST'},
-            'update': {method: 'PUT'},
-            'destroy': {method: 'DELETE'}
+            'update': {method: 'PUT'},  
+            'remove': {method: 'DELETE'}
         });
 
-        res.prototype.destroy = function(cb) {
-            return res.destroy({'id': this._id}, cb); //'_id': this._id
+        res.prototype.$remove = function(cb) {
+            return res.$remove({'id': this._id}, cb);
         };
+
+        // res.prototype.create = function(cb) {
+        //     return res.create({'id': this._id}, cb);
+        // };
 
         return res;
     });

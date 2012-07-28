@@ -20,24 +20,20 @@ function WineDetailsCtrl($scope, $location, $routeParams, Wine) {
     } else {
         $scope.wine = Wine.get({id: $routeParams.wineId});
     }
-    $scope.addWine = function () {
-            $location.path('/wines/new');
-    };
 
     $scope.saveWine = function () {
         if ($scope.wine._id === undefined)
-            $scope.wine.$create($scope.wine, function(wine) {
-                $location.path('/wines/' + wine._id);
+            $scope.create($scope.wine, function(wine) {
+                $location.path('/wines/' + wine._id + 'moinmoin');
             });
         else
-            $scope.wine.$update($scope.wine, function(wine) {
-                //window.location = "#/wines/" + wine._id;
+            $scope.update($scope.wine, function(wine) {
                 $location.path('/wines/' + wine._id);
             });
     };
 
     $scope.deleteWine = function () {
-        $scope.wine.$destroy($scope.wine, function() {
+        $scope.wine.$remove($scope.wine, {}, function() {
             //alert('Wine ' + this.wine.name + ' deleted');
             $location.path('/wines');
         });
