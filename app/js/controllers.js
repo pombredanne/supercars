@@ -2,34 +2,44 @@
 
 /* Controllers */
 
+function MenuCtrl($scope, $location) {
+    $scope.addWine = function () {
+        $location.path('/wines/new');
+    };
+}
+
+
 function WineListCtrl($scope, Wine) {
     $scope.wines = Wine.list();
 }
 
 
-function WineDetailsCtrl($scope, $routeParams, Wine) {
+function WineDetailsCtrl($scope, $location, $routeParams, Wine) {
     if ($routeParams.wineId === 'new') {
         $scope.wine = new Wine();
     } else {
         $scope.wine = Wine.get({id: $routeParams.wineId});
     }
     $scope.addWine = function () {
-        window.location = "#/wines/add";
+            $location.path('/wines/new');
     };
 
     $scope.saveWine = function () {
-        if (this.wine._id === undefined)
-            this.wine.$create();
+        if ($scope.wine._id === undefined)
+            $scope.wine.$create($scope.wine, function(wine) {
+                $location.path('/wines/' + wine._id);
+            });
         else
-            this.wine.$update({id:this.wine._id}, function() {
-                window.location = "#/wines";
+            $scope.wine.$update($scope.wine, function(wine) {
+                //window.location = "#/wines/" + wine._id;
+                $location.path('/wines/' + wine._id);
             });
     };
 
     $scope.deleteWine = function () {
-        this.wine.$delete({id:this.wine._id}, function() {
+        $scope.wine.$destroy($scope.wine, function() {
             //alert('Wine ' + this.wine.name + ' deleted');
-            window.location = "#/wines";
+            $location.path('/wines');
         });
     };
 

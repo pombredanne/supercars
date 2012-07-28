@@ -3,14 +3,20 @@ Ajax application ajaxdemo
 
 Ajax demo application implemented using AngularJS
 
-It is based on the AngularJS sekeleton (https://github.com/angular/angular-seed).
-
-I started with the Wine Cellar application taken from here.
-http://coenraets.org/blog/2012/02/sample-application-with-angular-js/
+It is based on the AngularJS skeleton (https://github.com/angular/angular-seed).
 
 I had to exchange the PHP backend to a Python/mongodb one.
 
 Another important thing I had to add is testing.
+
+
+Acknowledgements
+================
+
+I started with the Wine Cellar application taken from here.
+http://coenraets.org/blog/2012/02/sample-application-with-angular-js/
+
+Many thanks to cristatus from the Angularjs IRC channel. He helped me out debugging the wine cellar sample app.
 
 
 Restful webserver restserver
