@@ -10,8 +10,11 @@ function WineListCtrl($scope, Wine) {
 
 
 function WineDetailsCtrl($scope, $routeParams, Wine) {
-    $scope.wine = Wine.get({id: $routeParams.wineId});
-
+    if ($routeParams.wineId === 'new') {
+        $scope.wine = new Wine();
+    } else {
+        $scope.wine = Wine.get({id: $routeParams.wineId});
+    }
     $scope.addWine = function () {
         window.location = "#/wines/add";
     };

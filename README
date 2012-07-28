@@ -47,7 +47,7 @@ Populate the database
 ---------------------
 
 Once the restserver is running you can populate the database using curl.
-../scirpts/populate.sh
+../scripts/populate.sh
 
 
 Visit the Wine Cellar demo app
