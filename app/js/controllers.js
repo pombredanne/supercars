@@ -23,17 +23,17 @@ function WineDetailsCtrl($scope, $location, $routeParams, Wine) {
 
     $scope.saveWine = function () {
         if ($scope.wine._id === undefined)
-            $scope.create($scope.wine, function(wine) {
-                $location.path('/wines/' + wine._id + 'moinmoin');
+            $scope.wine.$save(function(wine) {
+                $location.path('/wines/' + wine._id);
             });
         else
-            $scope.update($scope.wine, function(wine) {
+            $scope.wine.$update(function(wine) {
                 $location.path('/wines/' + wine._id);
             });
     };
 
     $scope.deleteWine = function () {
-        $scope.wine.$remove($scope.wine, {}, function() {
+        $scope.wine.$remove(function() {
             //alert('Wine ' + this.wine.name + ' deleted');
             $location.path('/wines');
         });

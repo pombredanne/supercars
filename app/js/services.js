@@ -4,21 +4,25 @@
 
 angular.module('cellar.services', ['ngResource']).
     factory('Wine', function($resource) {
-        var res = $resource('/rest/cellar/wines/:id', {'id': '@_id'}, {
+        var Wine = $resource('/rest/cellar/wines/:id', {'id': '@_id'}, {
             //'id': '@_id'
             'list':   {method: 'GET', params:{'id': ''}, isArray:true},
-            'create': {method: 'POST'},
-            'update': {method: 'PUT'},  
-            'remove': {method: 'DELETE'}
+            // 'create': {method: 'POST'},
+            'update': {method: 'PUT'}
+            // 'remove': {method: 'DELETE'}
         });
 
-        res.prototype.$remove = function(cb) {
-            return res.$remove({'id': this._id}, cb);
-        };
-
-        // res.prototype.create = function(cb) {
-        //     return res.create({'id': this._id}, cb);
+        // Wine.prototype.create = function(cb) {
+        //     return Wine.create({'id': this._id}, cb);
         // };
 
-        return res;
+        // Wine.prototype.update = function(cb) {
+        //     return Wine.update({'id': this._id}, cb);
+        // };
+
+        // Wine.prototype.remove = function(cb) {
+        //     return Wine.remove({'id': this._id}, cb);
+        // };
+
+        return Wine;
     });
