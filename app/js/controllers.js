@@ -2,10 +2,8 @@
 
 /* Controllers */
 
-
 function WineListCtrl($scope, Wine) {
     $scope.wines = Wine.list();
-
 }
 
 
@@ -23,8 +21,9 @@ function WineDetailsCtrl($scope, $routeParams, Wine) {
         if (this.wine._id === undefined)
             this.wine.$create();
         else
-            this.wine.$update({id:this.wine._id});
-        window.location = "#/wines";
+            this.wine.$update({id:this.wine._id}, function() {
+                window.location = "#/wines";
+            });
     };
 
     $scope.deleteWine = function () {
