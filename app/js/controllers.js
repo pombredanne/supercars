@@ -35,8 +35,16 @@ function WineDetailsCtrl($scope, $location, $routeParams, Wine) {
     $scope.deleteWine = function () {
         $scope.wine.$remove(function() {
             //alert('Wine ' + this.wine.name + ' deleted');
-            $location.path('/wines');
+            // update the wine list as well
+            $scope.wines = Wine.list(function() {
+                $location.path('/wines');
+            });
         });
     };
 
 }
+
+
+scope tip:
+
+"you may need to do something like $scope.foo = $scope.$parent.foo = 'bar"'   

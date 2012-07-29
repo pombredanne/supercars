@@ -19,6 +19,11 @@ http://coenraets.org/blog/2012/02/sample-application-with-angular-js/
 Many thanks to cristatus from the Angularjs IRC channel. He helped me out debugging the wine cellar sample app.
 
 
+Debugging in Developer Tools
+============================
+
+Select an element and type the following into the console "angular.element($0).scope()".
+
 Restful webserver restserver
 ============================
 
