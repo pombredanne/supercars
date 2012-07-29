@@ -2,19 +2,18 @@
 
 /* Controllers */
 
-function MenuCtrl($scope, $location) {
+function WineListCtrl($scope, $location, Wine) {
+    $scope.wines = Wine.list();
+
     $scope.addWine = function () {
         $location.path('/wines/new');
     };
 }
 
 
-function WineListCtrl($scope, Wine) {
-    $scope.wines = Wine.list();
-}
-
-
 function WineDetailsCtrl($scope, $location, $routeParams, Wine) {
+    // nested controller to WineListCtrl so it can do updates
+    // using $scope.$parent.foo = 'bar'
     if ($routeParams.wineId === 'new') {
         $scope.wine = new Wine();
     } else {
@@ -24,6 +23,8 @@ function WineDetailsCtrl($scope, $location, $routeParams, Wine) {
     $scope.saveWine = function () {
         if ($scope.wine._id === undefined)
             $scope.wine.$save(function(wine) {
+                // update the wine list in the parent scope
+                $scope.$parent.wines = Wine.list();
                 $location.path('/wines/' + wine._id);
             });
         else
@@ -34,17 +35,10 @@ function WineDetailsCtrl($scope, $location, $routeParams, Wine) {
 
     $scope.deleteWine = function () {
         $scope.wine.$remove(function() {
-            //alert('Wine ' + this.wine.name + ' deleted');
-            // update the wine list as well
-            $scope.wines = Wine.list(function() {
-                $location.path('/wines');
-            });
+            // update the wine list in the parent scope
+            $scope.$parent.wines = Wine.list();
+            $location.path('/wines');
         });
     };
 
 }
-
-
-scope tip:
-
-"you may need to do something like $scope.foo = $scope.$parent.foo = 'bar"'   
