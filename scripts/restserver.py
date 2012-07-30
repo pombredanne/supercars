@@ -106,6 +106,8 @@ class RestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
             try:
                 data = json.loads(self.rfile.read(content_len))
                 if data:
+                    if '_id' in data:
+                        data.pop('_id') # hack to remove _id
                     db = self.mongoconn[database]
                     db[table].update({'_id': ObjectId(oid)}, data)
                     self.do_HEAD()
