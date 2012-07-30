@@ -17,12 +17,17 @@
     <label>Year:</label>
     <input type="text" ng-model="wine.year" />
 
+    <label>Image file:</label>
+    <input type="text" ng-model="wine.image" />
+
     <button class="save" ng:click="saveWine()">Save</button>
     <button class="delete" ng:click="deleteWine()">Delete</button>
 </div>
 
 <div class="form-right-col">
-    <!--img width="250" height="300" src="pics/{{ wine.picture }}" onerror="this.src='pics/generic.jpg'"/>-->
+    <img width="250" height="300" src="img/{{ wine.image }}" onerror="this.src='img/generic.jpg'"/>
+
     <label>Notes:</label>
     <textarea ng-model="wine.description" />
+
 </div>
