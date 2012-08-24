@@ -9,24 +9,27 @@ import BaseHTTPServer
 import SimpleHTTPServer
 import urlparse
 import json
-from pymongo import Connection
-from pymongo.objectid import ObjectId
+import os
 
 __version__ = "0.1"
-SERVER_HOST  = 'localhost'
-SERVER_PORT  = 8000
+SERVER_HOST = 'localhost'
+SERVER_PORT = 8000
 SERVER_APIPREFIX = 'rest'
 MONGODB_HOST = 'localhost'
 MONGODB_PORT = 27017
+WINECELLAR_FILE = 'winecellar.json'
+
+here = lambda x: os.path.abspath(os.path.join(os.path.dirname(__file__), x))
 
 
 #class RestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 class RestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
+    wines = {}  # store the wines
+    conf = {'seq': 1}  # unique id for the next wine entry
+
     def __init__(self, *args, **kwargs):
-        # add a mongodb connection to the RequestHandler
-        self.mongoconn = Connection(MONGODB_HOST, MONGODB_PORT)
-        self.server_version = "restserver/" + __version__
-        #BaseHTTPServer.BaseHTTPRequestHandler.__init__(self, *args, **kwargs)
+        if not self.wines:
+            self.load_wines(WINECELLAR_FILE)
         SimpleHTTPServer.SimpleHTTPRequestHandler.__init__(self, *args, **kwargs)
 
     def do_HEAD(self):
@@ -36,30 +39,31 @@ class RestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
     def do_GET(self):
         """Respond to a GET request."""
+        # Example (using cURL):
+        # curl -X GET 'http://localhost:8000/rest/cellar/wines/'
         url = urlparse.urlparse(self.path)
         path_elements = url.path.strip('/').split('/')
         if path_elements[0] != SERVER_APIPREFIX:
             SimpleHTTPServer.SimpleHTTPRequestHandler.do_GET(self)
+        elif path_elements[1] != 'cellar' or path_elements[2] != 'wines':
+            self.send_error(404,
+                'Use existing /%s/database/table/_id for document access'
+                    % SERVER_APIPREFIX)
         elif len(path_elements) == 3:
             api, database, table = path_elements
-            #query = url.query
-            db = self.mongoconn[database]
-            result = db[table].find()
             self.do_HEAD()
             self.wfile.write('[')
-            for i, r in enumerate(result):
+            for i, r in enumerate(self.wines):
                 if i != 0:
                     self.wfile.write(',')
-                r['_id'] = str(r['_id'])
-                self.wfile.write(json.dumps(r))
+                self.wfile.write(json.dumps(self.wines[r]))
             self.wfile.write(']')
         elif len(path_elements) == 4:
             api, database, table, oid = path_elements
-            db = self.mongoconn[database]
-            result = db[table].find_one({'_id': ObjectId(oid)})
+            result = self.wines[oid]
             self.do_HEAD()
             if result:
-                result['_id'] = str(result['_id'])
+                #result['_id'] = str(result['_id'])
                 self.wfile.write(json.dumps(result))
         else:
             self.send_error(404,
@@ -73,14 +77,19 @@ class RestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
         url = urlparse.urlparse(self.path)
         path_elements = url.path.strip('/').split('/')
-        if len(path_elements) == 3:
+        if path_elements[1] != 'cellar' or path_elements[2] != 'wines':
+            self.send_error(404,
+                'Use existing /%s/database/table/_id for document access'
+                    % SERVER_APIPREFIX)
+        elif len(path_elements) == 3:
             api, database, table = path_elements
             content_len = int(self.headers.getheader('content-length'))
             try:
                 data = json.loads(self.rfile.read(content_len))
                 if data:
-                    db = self.mongoconn[database]
-                    oid = db[table].insert(data)
+                    oid = self.next_id()
+                    data['_id'] = oid
+                    self.wines[oid] = data
                     self.do_HEAD()
                     if oid:
                         self.wfile.write('{"_id": "%s"}' % oid)
@@ -100,16 +109,18 @@ class RestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
         url = urlparse.urlparse(self.path)
         path_elements = url.path.strip('/').split('/')
-        if len(path_elements) == 4:
+        if path_elements[1] != 'cellar' or path_elements[2] != 'wines':
+            self.send_error(404,
+                'Use existing /%s/database/table/_id for document access'
+                    % SERVER_APIPREFIX)
+        elif len(path_elements) == 4:
             api, database, table, oid = path_elements
             content_len = int(self.headers.getheader('content-length'))
             try:
                 data = json.loads(self.rfile.read(content_len))
                 if data:
-                    if '_id' in data:
-                        data.pop('_id') # hack to remove _id
-                    db = self.mongoconn[database]
-                    db[table].update({'_id': ObjectId(oid)}, data)
+                    data['_id'] = oid
+                    self.wines[oid] = data
                     self.do_HEAD()
             except ValueError:
                 self.send_error(400, 'Invalid data')
@@ -125,17 +136,34 @@ class RestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
         url = urlparse.urlparse(self.path)
         path_elements = url.path.strip('/').split('/')
-        if len(path_elements) == 4:
+        if path_elements[1] != 'cellar' or path_elements[2] != 'wines':
+            self.send_error(404,
+                'Use existing /%s/database/table/_id for document access'
+                    % SERVER_APIPREFIX)
+        elif len(path_elements) == 4:
             api, database, table, oid = path_elements
-            db = self.mongoconn[database]
-            result = db[table].remove(ObjectId(oid))
+            self.wines.pop(oid)
             self.do_HEAD()
-            if result:
-                self.wfile.write(result)
         else:
             self.send_error(404,
                 'Use existing /%s/database/table/_id/ to delete documents'
                     % SERVER_APIPREFIX)
+
+    def next_id(self):
+        """Create a unique record id"""
+        res = "%0.5d" % self.conf['seq']
+        self.conf['seq'] += 1
+        return res
+
+    def load_wines(self, filename):
+        """Load wine cellar from json file"""
+        f = open(here(filename))
+        data = json.loads("".join(f.readlines()))
+        f.close()
+        for d in data:
+            oid = self.next_id()
+            d['_id'] = oid
+            self.wines[oid] = d
 
 
 if __name__ == '__main__':
