@@ -39,7 +39,7 @@
     </condition>
 
     <java classname="fitnesseMain.FitNesseMain"
-      output="${report.path}/fitresults_${DSTAMP}-${reportTime}.xml"
+      output="${report.path}/fitresults_${DSTAMP}-${report.time}.xml"
       failonerror="true" fork="true" >
       <classpath>
         <pathelement location="${fitnesse.basedir}/lib/fitnesse.jar" />
