@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- based on http://andypalmer.com/2009/04/showing-fitnesse-test-results-in-hudson/ -->
+<project name="Execute FitNesse TestSuite" default="test">
+  <target name="run-tests" description="Run fitnesse acceptance tests.">
+    <property name="fitnesse.output.dir" value="build" />
+    <property name="fitnesse.output.file" value="${fitnesse.output.dir}/fitnesse-test-results" />
+    <property name="fitnesse.port" value="8765" />
+    <path id="fitpath">
+      <fileset dir=".">
+        <include name="fit*.jar" />
+        <include name="lib/fitnesse-20070619/fitnesse-20070619.jar" />
+      </fileset>
+    </path>
+    <echo message="About to run fitnesse server" level="info" />
+    <parallel>
+      <daemons>
+        <java classname="fitnesse.FitNesse" classpath="${toString:fitpath};${ant.home}/lib/xercesImpl.jar">
+          <arg value="-p" />
+          <arg value="${fitnesse.port}" />
+          <arg value="-e" />
+          <arg value="0" />
+          <arg value="-d" />
+          <arg value="content" />
+          <arg value="-r" />
+          <arg value="FitnesseRoot" />
+        </java>
+      </daemons>
+      <sequential>
+        <echo message="sleeping for 10 seconds to let FitNesse server start" level="info" />
+        <sleep seconds="10" />
+        <java classpathref="fitpath" classname="fitnesse.runner.TestRunner" fork="true" resultproperty="fit.test.failures">
+          <arg value="-debug" />
+          <arg value="-xml" />
+          <arg value="${fitnesse.output.file}.xml" />
+          <arg value="-html" />
+          <arg value="${fitnesse.output.file}.html" />
+          <arg value="localhost" />
+          <arg value="${fitnesse.port}" />
+          <arg value="UserStories.FooterStory" />
+        </java>
+        <replace file="${fitnesse.output.file}.html" token="<base href="http://localhost:${fitnesse.port}/"/>" />
+        <echo message="Finished FIT tests: ${fit.test.failures} failures/exceptions" level="info" />
+        <!--
+      <fail message="FIT test failures/exceptions: ${fit.test.failures}">
+        <condition>
+          <not>
+            <equals arg1="${fit.test.failures}" arg2="0" />
+          </not>
+            </condition>
+      </fail>
+      -->
+      </sequential>
+    </parallel>
+  </target>
+
+  <target name="convert-fitnesse-results-to-junit">
+    <xslt style="fitnesse2junit.xsl" in="build/fitnesse-test-results.xml" out="build/junit.xml" />
+  </target>
+
+  <target name="test" depends="run-tests, convert-fitnesse-results-to-junit" />
+</project>
