@@ -12,7 +12,7 @@
 |The Exit Date is 2000-03-01                        |
 |Calculate Cost                                     |
 |The time difference is 1 DAYS, 23 HOURS, 11 MINUTES|
-|The cost is                |$ 18.00                |
+|The cost is                |$ 19.00                |
 
 
 
