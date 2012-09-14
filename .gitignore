@@ -10,6 +10,7 @@ tests/fitnesse/logs/
 test/fitnesse/FitNesseRoot/files/testResults/
 test/fitnesse/FitNesseRoot/files/testHistory/
 test/fitnesse/FitNesseRoot/ErrorLogs/
+test/fitnesse/FitNesseRoot/RecentChanges/
 
 *.pyc
 *.class
