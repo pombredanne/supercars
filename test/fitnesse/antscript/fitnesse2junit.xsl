@@ -22,7 +22,7 @@
         <xsl:value-of select="/testResults/rootPath" />
       </xsl:attribute>
       <xsl:attribute name="name">
-        <xsl:value-of select="relativePageName" />
+        <xsl:value-of select="substring-before(pageHistoryLink,'?')"/>
       </xsl:attribute>
       <xsl:choose>
         <xsl:when test="counts/exceptions > 0">
