@@ -1,61 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- based on http://andypalmer.com/2009/04/showing-fitnesse-test-results-in-hudson/ -->
 <project name="Execute FitNesse TestSuite" default="test">
+  <tstamp>
+    <format property="report.time" pattern="kkmmss" />
+  </tstamp>
+
+  <target name="hudson-info">
+    <echo>Hudson-Info:
+      BUILD_NUMBER: ${env.BUILD_NUMBER}
+      BUILD_ID: ${env.BUILD_ID}
+      JOB_NAME: ${env.JOB_NAME}
+      BUILD_TAG:
+      ${env.BUILD_TAG}
+      EXECUTOR_NUMBER: ${env.EXECUTOR_NUMBER}
+      JAVA_HOME: ${env.JAVA_HOME}
+      WORKSPACE: ${env.WORKSPACE}
+    </echo>
+  </target>
+
+  <target name="checks" description="Checks that properties specified">
+    <fail message="fitnesse.testfile is missing!" unless="fitnesse.testfile" />
+    <fail message="fitnesse.resultpath is missing!" unless="fitnesse.resultpath" />
+    <fail message="fitnesse.port is missing!" unless="fitnesse.port" />
+    <fail message="slim.port is missing!" unless="slim.port" />
+    <fail message="selenium.server is missing!" unless="selenium.server" />
+    <fail message="selenium.browser is missing!" unless="selenium.browser" />
+  </target>
+
   <target name="run-tests" description="Run fitnesse acceptance tests.">
     <property name="fitnesse.output.dir" value="build" />
     <property name="fitnesse.output.file" value="${fitnesse.output.dir}/fitnesse-test-results" />
     <property name="fitnesse.port" value="8765" />
-    <path id="fitpath">
-      <fileset dir=".">
-        <include name="fit*.jar" />
-        <include name="lib/fitnesse-20070619/fitnesse-20070619.jar" />
-      </fileset>
-    </path>
-    <echo message="About to run fitnesse server" level="info" />
-    <parallel>
-      <daemons>
-        <java classname="fitnesse.FitNesse" classpath="${toString:fitpath};${ant.home}/lib/xercesImpl.jar">
-          <arg value="-p" />
-          <arg value="${fitnesse.port}" />
-          <arg value="-e" />
-          <arg value="0" />
-          <arg value="-d" />
-          <arg value="content" />
-          <arg value="-r" />
-          <arg value="FitnesseRoot" />
-        </java>
-      </daemons>
-      <sequential>
-        <echo message="sleeping for 10 seconds to let FitNesse server start" level="info" />
-        <sleep seconds="10" />
-        <java classpathref="fitpath" classname="fitnesse.runner.TestRunner" fork="true" resultproperty="fit.test.failures">
-          <arg value="-debug" />
-          <arg value="-xml" />
-          <arg value="${fitnesse.output.file}.xml" />
-          <arg value="-html" />
-          <arg value="${fitnesse.output.file}.html" />
-          <arg value="localhost" />
-          <arg value="${fitnesse.port}" />
-          <arg value="UserStories.FooterStory" />
-        </java>
-        <replace file="${fitnesse.output.file}.html" token="<base href="http://localhost:${fitnesse.port}/"/>" />
-        <echo message="Finished FIT tests: ${fit.test.failures} failures/exceptions" level="info" />
-        <!--
-      <fail message="FIT test failures/exceptions: ${fit.test.failures}">
-        <condition>
-          <not>
-            <equals arg1="${fit.test.failures}" arg2="0" />
-          </not>
-            </condition>
-      </fail>
-      -->
-      </sequential>
-    </parallel>
+    <!-- use -suiteFilter option only in case a list of suites is given -->
+    <condition property="useSuiteFilter" 
+        value="&amp;suiteFilter=${fitnesse.suiteFilter}" else="">
+      <isset property="fitnesse.suiteFilter" />
+    </condition>
+    <!-- use -excludeSuiteFilter option only in case a list of excludes is given -->
+    <condition property="useExludeSuiteFilter" value="&amp;excludeSuiteFilter=${fitnesse.excludeSuiteFilter}" else="">
+      <isset property="fitnesse.excludeSuiteFilter" />
+    </condition>
+
+    <java classname="fitnesseMain.FitNesseMain"
+      output="${fitnesse.resultpath}/${fitnesse.resultfile}.xml"
+      failonerror="true" fork="true" >
+      <classpath>
+        <pathelement location="${fitnesse.basedir}/lib/fitnesse.jar" />
+        <fileset dir="${fitnesse.basedir}/" includes="lib/*.jar"/>      
+      </classpath>
+      <sysproperty key="user.language" value="en"/>
+      <sysproperty key="SELENIUM_SERVER" value="${selenium.server}"/>
+      <sysproperty key="SELENIUM_BROWSER" value="${selenium.browser}"/>
+      <sysproperty key="SLIM_PORT" value="${slim.port}"/>
+      <arg value="-d" />
+      <arg value="${fitnesse.basedir}" />
+      <arg value="-c" />
+      <arg value="${fitnesse.testfile}?suite&amp;format=xml&amp;includehtml${useSuiteFilter}${useExludeSuiteFilter}" />
+      <arg value="-p" />
+      <arg value="${fitnesse.port}" />
+      <jvmarg value="-Xmx200M"/>
+    </java>
+    <echo message="Finished FitNesse test execution: ${fit.test.failures} failures/exceptions" level="info" />
+
+    <replaceregexp
+               byline="false"
+               flags="ms"
+               file="${fitnesse.resultpath}/${fitnesse.resultfile}.xml"
+               match=".*(&lt;\?xml.*testResults&gt;).*"
+               replace="\1"
+    />
   </target>
 
-  <target name="convert-fitnesse-results-to-junit">
+  <target name="convert-fitnesse-to-junit">
     <xslt style="fitnesse2junit.xsl" in="build/fitnesse-test-results.xml" out="build/junit.xml" />
   </target>
 
-  <target name="test" depends="run-tests, convert-fitnesse-results-to-junit" />
+  <target name="cleanup">
+    <!-- cleanup old results according to daysKeepResults setting -->
+    <tstamp><format property="wildcard.day" pattern="yyyyMMdd" offset="-${report.daysKeepResults}" unit="day"/></tstamp>
+    <tstamp><format property="wildcard.month" pattern="yyyyMM" offset="-2" unit="month"/></tstamp>
+    <delete>
+        <fileset dir="${fitnesse.basedir}/FitNesseRoot/files/testResults" includes="**/${wildcard.day}*.*"/>
+        <fileset dir="${fitnesse.basedir}/FitNesseRoot/files/testHistory" includes="**/*results_${wildcard.day}*.*"/>
+        <fileset dir="${fitnesse.basedir}/FitNesseRoot/files/testResults" includes="**/${wildcard.month}*.*"/>
+        <fileset dir="${fitnesse.basedir}/FitNesseRoot/files/testHistory" includes="**/*results_${wildcard.month}*.*"/>
+    </delete>
+  </target>
+
+  <target name="test" depends="checks, cleanup, run-tests, convert-fitnesse-to-junit" />
 </project>
