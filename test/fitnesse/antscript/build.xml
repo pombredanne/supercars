@@ -28,7 +28,7 @@
   </target>
 
   <target name="run-tests" description="Run fitnesse acceptance tests.">
-    <property report.filename="fitresults_${DSTAMP}-${reportTime}" />
+    <property filename="fitresults_${DSTAMP}-${reportTime}" />
     <!-- use -suiteFilter option only in case a list of suites is given -->
     <condition property="useSuiteFilter" 
         value="&amp;suiteFilter=${fitnesse.suiteFilter}" else="">
@@ -40,7 +40,7 @@
     </condition>
 
     <java classname="fitnesseMain.FitNesseMain"
-      output="${report.path}/${report.filename}.xml"
+      output="${report.path}/${filename}.xml"
       failonerror="true" fork="true" >
       <classpath>
         <pathelement location="${fitnesse.basedir}/lib/fitnesse.jar" />
@@ -63,7 +63,7 @@
     <replaceregexp
                byline="false"
                flags="ms"
-               file="${report.path}/${report.filename}.xml"
+               file="${report.path}/${filename}.xml"
                match=".*(&lt;\?xml.*testResults&gt;).*"
                replace="\1"
     />
