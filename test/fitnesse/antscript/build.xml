@@ -69,7 +69,7 @@
   </target>
 
   <target name="convert-fitnesse-to-junit">
-    <xslt style="fitnesse2junit.xsl" in="${report.path}/${report.filename}.xml" out="${report.path}/junit.xml" />
+    <xslt style="fitnesse2junit.xsl" in="${report.path}/$fitresults_${DSTAMP}-${reportTime}.xml" out="${report.path}/junit.xml" />
   </target>
 
   <target name="cleanup">
