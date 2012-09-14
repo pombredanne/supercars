@@ -62,14 +62,14 @@
     <replaceregexp
                byline="false"
                flags="ms"
-               file="${report.path}/$fitresults_${DSTAMP}-${reportTime}.xml"
+               file="${report.path}/$fitresults_${DSTAMP}-${report.time}.xml"
                match=".*(&lt;\?xml.*testResults&gt;).*"
                replace="\1"
     />
   </target>
 
   <target name="convert-fitnesse-to-junit">
-    <xslt style="fitnesse2junit.xsl" in="${report.path}/$fitresults_${DSTAMP}-${reportTime}.xml" out="${report.path}/junit.xml" />
+    <xslt style="fitnesse2junit.xsl" in="${report.path}/$fitresults_${DSTAMP}-${report.time}.xml" out="${report.path}/junit.xml" />
   </target>
 
   <target name="cleanup">
