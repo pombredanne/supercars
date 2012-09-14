@@ -20,17 +20,15 @@
 
   <target name="checks" description="Checks that properties specified">
     <fail message="fitnesse.testfile is missing!" unless="fitnesse.testfile" />
-    <fail message="fitnesse.resultpath is missing!" unless="fitnesse.resultpath" />
     <fail message="fitnesse.port is missing!" unless="fitnesse.port" />
     <fail message="slim.port is missing!" unless="slim.port" />
     <fail message="selenium.server is missing!" unless="selenium.server" />
     <fail message="selenium.browser is missing!" unless="selenium.browser" />
+    <fail message="report.path is missing!" unless="report.path" />
   </target>
 
   <target name="run-tests" description="Run fitnesse acceptance tests.">
-    <property name="fitnesse.output.dir" value="build" />
-    <property name="fitnesse.output.file" value="${fitnesse.output.dir}/fitnesse-test-results" />
-    <property name="fitnesse.port" value="8765" />
+    <property report.filename="fitresults_${DSTAMP}-${reportTime}" />
     <!-- use -suiteFilter option only in case a list of suites is given -->
     <condition property="useSuiteFilter" 
         value="&amp;suiteFilter=${fitnesse.suiteFilter}" else="">
@@ -42,7 +40,7 @@
     </condition>
 
     <java classname="fitnesseMain.FitNesseMain"
-      output="${fitnesse.resultpath}/${fitnesse.resultfile}.xml"
+      output="${report.path}/${report.filename}.xml"
       failonerror="true" fork="true" >
       <classpath>
         <pathelement location="${fitnesse.basedir}/lib/fitnesse.jar" />
@@ -65,14 +63,14 @@
     <replaceregexp
                byline="false"
                flags="ms"
-               file="${fitnesse.resultpath}/${fitnesse.resultfile}.xml"
+               file="${report.path}/${report.filename}.xml"
                match=".*(&lt;\?xml.*testResults&gt;).*"
                replace="\1"
     />
   </target>
 
   <target name="convert-fitnesse-to-junit">
-    <xslt style="fitnesse2junit.xsl" in="build/fitnesse-test-results.xml" out="build/junit.xml" />
+    <xslt style="fitnesse2junit.xsl" in="${report.path}/${report.filename}.xml" out="${report.path}/junit.xml" />
   </target>
 
   <target name="cleanup">
