@@ -1,0 +1,67 @@
+[0.001][INFO]:      ChromeDriver 21.0.1180.4 /home/mark/bin/chromedriver
+[0.671][FINE]:      Initializing session with capabilities {
+   "browserName": "chrome",
+   "chrome.switches": [  ],
+   "chromeOptions": {
+      "args": [  ],
+      "extensions": [  ]
+   },
+   "platform": "ANY",
+   "version": ""
+}
+
+[0.671][INFO]:      Launching chrome: /opt/google/chrome/google-chrome --disable-hang-monitor --disable-prompt-on-repost --dom-automation --full-memory-crash-report --no-default-browser-check --no-first-run --ignore-certificate-errors --disable-popup-blocking --homepage=about:blank
+[2.048][INFO]:      Connected to Chrome successfully. Version: 23.0.1243.2
+[2.079][FINE]:      Command received (/session/389a85cdb0b9b7ce600097f73a9d228d)
+[2.080][FINE]:      Command finished (/session/389a85cdb0b9b7ce600097f73a9d228d) with response {
+   "sessionId": "389a85cdb0b9b7ce600097f73a9d228d",
+   "status": 0,
+   "value": {
+      "acceptSslCerts": false,
+      "applicationCacheEnabled": false,
+      "browserConnectionEnabled": false,
+      "browserName": "chrome",
+      "chrome.chromedriverVersion": "21.0.1180.4",
+      "chrome.nativeEvents": false,
+      "cssSelectorsEnabled": true,
+      "databaseEnabled": false,
+      "handlesAlerts": true,
+      "javascriptEnabled": true,
+      "locationContextEnabled": false,
+      "nativeEvents": true,
+      "platform": "linux",
+      "rotatable": false,
+      "takesScreenshot": true,
+      "version": "23.0.1243.2",
+      "webStorageEnabled": true
+   }
+}
+
+[2.115][FINE]:      Command received (/session/389a85cdb0b9b7ce600097f73a9d228d/url) with params {
+   "url": "file://./files/ajaxTestHarness.html"
+}
+
+[2.116][FINER]:     Waiting for all views to stop loading...
+[2.116][FINER]:     Done waiting for all views to stop loading
+[2.485][FINER]:     Waiting for all views to stop loading...
+[2.490][FINER]:     Done waiting for all views to stop loading
+[2.490][FINE]:      Command finished (/session/389a85cdb0b9b7ce600097f73a9d228d/url) with response {
+   "sessionId": "389a85cdb0b9b7ce600097f73a9d228d",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[2.496][FINE]:      Command received (/session/389a85cdb0b9b7ce600097f73a9d228d/title)
+[2.496][FINER]:     Waiting for all views to stop loading...
+[2.497][FINER]:     Done waiting for all views to stop loading
+[2.527][FINER]:     Waiting for all views to stop loading...
+[2.528][FINER]:     Done waiting for all views to stop loading
+[2.528][FINE]:      Command finished (/session/389a85cdb0b9b7ce600097f73a9d228d/title) with response {
+   "sessionId": "389a85cdb0b9b7ce600097f73a9d228d",
+   "status": 0,
+   "value": "file://./files/ajaxTestHarness.html is not found"
+}
+
+[2.532][FINE]:      Command received (/session/389a85cdb0b9b7ce600097f73a9d228d/window)

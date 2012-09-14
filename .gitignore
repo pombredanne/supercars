@@ -6,6 +6,10 @@ artwork/
 bak/
 env/
 testruns/
+tests/fitnesse/logs/
+test/fitnesse/FitNesseRoot/files/testResults/
+test/fitnesse/FitNesseRoot/files/testHistory/
+test/fitnesse/FitNesseRoot/ErrorLogs/
 
 *.pyc
 *.class

@@ -1,0 +1,1 @@
+java -Xmx200M -DSELENIUM_BROWSER=FirefoxRemoteRunner -DSELENIUM_SERVER=http://localhost:4444/wd/hub -cp test/fitnesse/lib/fitnesse.jar:test/fitnesse/lib/* fitnesseMain.FitNesseMain -d $PWD/test/fitnesse -p 10200 -e 0 -r FitNesseRoot -l test/fitnesse/logs/
