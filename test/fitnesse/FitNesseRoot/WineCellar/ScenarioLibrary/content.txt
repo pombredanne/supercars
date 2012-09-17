@@ -3,6 +3,7 @@
 !|scenario               |textfield _ type _|id,text    |
 |wait for element present|@id                           |
 |find element            |@id                           |
+|clear                                                  |
 |type                    |@text                         |
 |check                   |get attribute     |value|@text|
 
