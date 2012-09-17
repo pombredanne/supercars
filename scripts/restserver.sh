@@ -14,7 +14,7 @@
 case $1 in
     "start" )
         echo "start python .restserver"
-        nohup python ./backend/restserver.py > /tmp/nohup.out &
+        nohup python ./backend/restserver.py > /tmp/nohup.out 2> /tmp/nohup.out &
         ;;
     "stop" )
         echo "stop python restserver"
@@ -23,7 +23,7 @@ case $1 in
     "restart" )
         echo "restart python restserver"
         kill `ps aux | grep "python ./backend/restserver.py" | grep -v grep | awk '{print $2}'` > /dev/null 
-        nohup python ./backend/restserver.py > /tmp/nohup.out &
+        nohup python ./backend/restserver.py > /tmp/nohup.out 2> /tmp/nohup.out &
         ;;
     *)
         echo "need start|stop|restart"

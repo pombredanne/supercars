@@ -1,0 +1,21 @@
+!2 Create a new wine
+
+!|script                                                                                                                                                                                                                                                          |
+|open     |http://localhost:8000/app/#/wines                                                                                                                                                                                                                      |
+|execute  |id:newButton                                                                                                                                                                                                                                           |
+|textfield|id:nameInput          |type|VITICCIO CLASSICO RISERVA                                                                                                                                                                                                  |
+|textfield|id:yearInput          |type|2007                                                                                                                                                                                                                       |
+|textfield|id:grapesInput        |type|Sangiovese Merlot                                                                                                                                                                                                          |
+|textfield|id:countryInput       |type|Italy                                                                                                                                                                                                                      |
+|textfield|id:regionInput        |type|Tuscany                                                                                                                                                                                                                    |
+|textfield|id:descriptionTextarea|type|Though soft and rounded in texture, the body of this wine is full and rich and oh-so-appealing. This delivery is even more impressive when one takes note of the tender tannins that leave the taste buds wholly satisfied.|
+|textfield|id:imageInput         |type|viticcio.jpg                                                                                                                                                                                                               |
+|execute  |id:saveButton                                                                                                                                                                                                                                          |
+
+verify that the new wine is contained
+!|script                                             |
+|find element|id:sidebar                             |
+|ensure      |contains text|VITICCIO CLASSICO RISERVA|
+
+!|script|
+|stop   |
