@@ -147,6 +147,10 @@ class RestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
                 'Use existing /%s/database/table/_id/ to delete documents'
                     % SERVER_APIPREFIX)
 
+    def log_message(self, format, *args):
+        # shut up!
+        pass
+
     def next_id(self):
         """Create a unique record id"""
         res = "%0.5d" % self.conf['seq']

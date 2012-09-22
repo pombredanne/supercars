@@ -22,3 +22,5 @@ test/fitnesse/FitNesseRoot/RecentChanges/
 *.bak
 *.tar.gz
 data.txt
+pylint.out
+chromedriver.log
