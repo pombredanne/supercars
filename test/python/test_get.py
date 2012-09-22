@@ -1,3 +1,4 @@
+import sys
 import logging
 import json
 import BaseHTTPServer
@@ -5,8 +6,10 @@ import BaseHTTPServer
 from nose.tools import assert_equal, assert_true
 from mock import MagicMock
 
-from restserver import RestHandler
 from testutils import HttpServerTestBase
+
+sys.path.append("../../backend")
+from restserver import RestHandler
 
 logger = logging.getLogger(__name__)
 
