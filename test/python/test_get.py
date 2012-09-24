@@ -47,12 +47,11 @@ class TestGetMethod(HttpServerTestBase):
         try:
             wines = json.loads(response.read())
             print wines
-            assert_equal(len(wines), 11)
+            assert_equal(len(wines), 10)
             assert_equal(wines[0]['name'], 'OWEN ROE "EX UMBRIS"')
             self.thread.server.do_HEAD.assert_called_once()
         finally:
             response.close()
-
 
     def test_get_invalid_path(self):
         response = self.request(

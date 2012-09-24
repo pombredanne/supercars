@@ -58,11 +58,14 @@ class RestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
             self.wfile.write(']')
         elif len(path_elements) == 4:
             api, database, table, oid = path_elements
-            result = self.wines[oid]
-            self.do_HEAD()
-            if result:
-                #result['_id'] = str(result['_id'])
-                self.wfile.write(json.dumps(result))
+            try:
+                result = self.wines[oid]
+                self.do_HEAD()
+                if result:
+                    #result['_id'] = str(result['_id'])
+                    self.wfile.write(json.dumps(result))
+            except KeyError:
+                self.send_error(404, 'Invalid record id')
         else:
             self.send_error(404,
                 'Use existing /%s/database/table/_id for document access'
@@ -140,8 +143,12 @@ class RestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
                     % SERVER_APIPREFIX)
         elif len(path_elements) == 4:
             api, database, table, oid = path_elements
-            self.wines.pop(oid)
-            self.do_HEAD()
+            if oid in self.wines:
+                self.wines.pop(oid)
+                self.do_HEAD()
+            else:
+                self.send_error(404,
+                    'record does not exist')
         else:
             self.send_error(404,
                 'Use existing /%s/database/table/_id/ to delete documents'
