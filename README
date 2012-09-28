@@ -44,21 +44,31 @@ This means using the HTTP protocol as it is intended.
 Installing ajaxdemo and tools
 -----------------------------
 
-All you need is a Python installation and running mongodb server listening on port 27017.
+All you need is a Python installation. If you are going to use the backend based on mongodb you will need a running mongodb server listening on port 27017.
+
+
+Working on Jasmine-Unit-Tests
+-----------------------------
+
+The ajaxdemo sample uses Testacular for Javascript unit testing. We assume that you have a Node.js installation on your machine and the testacular package installed as well.
+
+Testacular comes with a watcher which runs the Jasmine unittests every time you change a file. You can start the watcher with this command:
+
+./script/test.sh
 
 
 Run ajaxdemo
 ------------
 
-cd app
-python ../scripts/restserver.py
+python ./scripts/restserver.py
 
 
 Populate the database (in case you use the mongodb version of the backend)
 --------------------------------------------------------------------------
 
 Once the restserver is running you can populate the database using curl.
-../scripts/populate.sh
+
+./scripts/populate.sh
 
 
 Visit the Wine Cellar demo app
