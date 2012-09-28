@@ -54,8 +54,8 @@ cd app
 python ../scripts/restserver.py
 
 
-Populate the database
----------------------
+Populate the database (in case you use the mongodb version of the backend)
+--------------------------------------------------------------------------
 
 Once the restserver is running you can populate the database using curl.
 ../scripts/populate.sh
