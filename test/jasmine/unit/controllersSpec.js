@@ -2,7 +2,7 @@
 
 /* jasmine specs for controllers go here */
 describe('Ajaxdemo controllers', function() {
-
+/*
   beforeEach(function(){
     this.addMatchers({
       toEqualData: function(expected) {
@@ -11,8 +11,8 @@ describe('Ajaxdemo controllers', function() {
     });
   });
 
-beforeEach(module('cellar.services'));
-
+  beforeEach(module('cellar.services'));
+  // TODO add, save, delete go here!
 
   describe('WineListCtrl', function() {
     var scope, ctrl, $httpBackend;
@@ -36,8 +36,31 @@ beforeEach(module('cellar.services'));
       expect(scope.wines).toEqualData([
             {"name":"BLOCK NINE","year":"2009","grapes":"Pinot Noir","country":"USA","region":"California","description":"With hints of ginger and spice, this wine makes an excellent complement to light appetizer and dessert fare for a holiday gathering."},
             {"name":"BODEGA LURTON","year":"2011","grapes":"Pinot Gris","country":"Argentina","region":"Mendoza","description":"Solid notes of black currant blended with a light citrus make this wine an easy pour for varied palates."}]);
+    });*/
+  describe('WineListCtrl', function() {
+    var scope, location, ctrl;
+ 
+    beforeEach(function() {
+      // for each testcase initialize a new controller
+      scope = {'wines':[]};
+      // TODO: find out how to mock location.path function
+      location = {'path':function(apath) {return;}};
+      var Wines = {'list': function() {return [{"name":"BLOCK NINE"},{"name":"BODEGA LURTON"}];
+      }};
+      ctrl = new WineListCtrl(scope, location, Wines);
     });
 
-  });
 
+    it('should change location when calling addWine', function() {
+      // TODO find out how to verify path changes
+      spyOn(location, 'path');
+      scope.addWine();
+      expect(location.path).wasCalledWith('/wines/new');
+    });
+
+
+    it('should create "wines" model from backend call', function() {
+      expect(scope.wines).toEqual([{"name":"BLOCK NINE"},{"name":"BODEGA LURTON"}]);
+    });
+  });
 });
