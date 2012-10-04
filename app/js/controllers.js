@@ -13,9 +13,8 @@ function WineListCtrl($scope, $location, Wine) {
 
 function WineDetailsCtrl($scope, $location, $routeParams, Wine) {
     // nested controller to WineListCtrl so it can do updates
-    // using $scope.$parent.foo = 'bar'
     if ($routeParams.wineId === 'new') {
-        $scope.wine = new Wine();
+        $scope.wine = new Wine(); 
     } else {
         $scope.wine = Wine.get({id: $routeParams.wineId});
     }
@@ -29,12 +28,12 @@ function WineDetailsCtrl($scope, $location, $routeParams, Wine) {
             });
         else
             $scope.wine.$update(function(wine) {
-                $location.path('/wines/' + wine._id);
+                //$location.path('/wines/' + wine._id);
             });
     };
 
     $scope.deleteWine = function () {
-        $scope.wine.$remove(function() {
+        $scope.wine.$remove({}, function() {
             // update the wine list in the parent scope
             $scope.$parent.wines = Wine.list();
             $location.path('/wines');
