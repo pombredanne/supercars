@@ -111,17 +111,19 @@ describe('ajaxdemo controllers', function() {
 
       routeParams.wineId = 'xyz';
       $httpBackend.expectGET('/rest/cellar/wines/xyz').respond(wineDetails());
+
       controller(WineDetailsCtrl, {$scope: scope});
       $httpBackend.flush();
       scope.wine._id = 'xyz';
 
       $httpBackend.expectPUT('/rest/cellar/wines/xyz', result).respond();
+      $httpBackend.expectGET('/rest/cellar/wines').respond(wineList());
 
       spyOn(location, 'path');
 
       scope.saveWine();
       $httpBackend.flush();
-      expect(location.path).wasNotCalled();
+      expect(location.path).wasCalledWith('/wines/xyz');
 
       expect(scope.wine).toEqualData(result);
     });

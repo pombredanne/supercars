@@ -28,12 +28,14 @@ function WineDetailsCtrl($scope, $location, $routeParams, Wine) {
             });
         else
             $scope.wine.$update(function(wine) {
-                //$location.path('/wines/' + wine._id);
+                // update the list since it is possible to update the name
+                $scope.$parent.wines = Wine.list();
+                $location.path('/wines/' + wine._id);
             });
     };
 
     $scope.deleteWine = function () {
-        $scope.wine.$remove({}, function() {
+        $scope.wine.$remove(function() {
             // update the wine list in the parent scope
             $scope.$parent.wines = Wine.list();
             $location.path('/wines');
