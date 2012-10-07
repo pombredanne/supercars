@@ -6,6 +6,7 @@ files = [
   'app/lib/angular/angular.js',
   'app/lib/angular/angular-*.js',
   'test/jasmine/lib/angular/angular-mocks.js',
+
   'app/js/**/*.js',
   'test/jasmine/unit/**/*.js'
 ];
@@ -15,6 +16,6 @@ autoWatch = true;
 browsers = ['Chrome'];
 
 junitReporter = {
-  outputFile: 'unit.xml',
+  outputFile: 'junit.xml',
   suite: 'unit'
 };
