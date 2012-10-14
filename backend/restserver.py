@@ -10,14 +10,16 @@ import SimpleHTTPServer
 import urlparse
 import json
 import os
+import sys
+
+
+here = lambda x: os.path.abspath(os.path.join(os.path.dirname(__file__), x))
 
 __version__ = "0.1"
 SERVER_HOST = 'localhost'
 SERVER_PORT = 8000
 SERVER_APIPREFIX = 'rest'
-WINECELLAR_FILE = 'winecellar.json'
-
-here = lambda x: os.path.abspath(os.path.join(os.path.dirname(__file__), x))
+WINECELLAR_FILE = here('winecellar.json')
 
 
 #class RestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
@@ -166,7 +168,7 @@ class RestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
     def load_wines(self, filename):
         """Load wine cellar from json file"""
-        f = open(here(filename))
+        f = open(filename)
         data = json.loads("".join(f.readlines()))
         f.close()
         for d in data:
@@ -179,6 +181,8 @@ if __name__ == '__main__':
     server_class = BaseHTTPServer.HTTPServer
     httpd = server_class((SERVER_HOST, SERVER_PORT), RestHandler)
     print time.asctime(), "Server Starts - %s:%s" % (SERVER_HOST, SERVER_PORT)
+    if len(sys.argv) > 1:
+        os.chdir(sys.argv[1])
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:
