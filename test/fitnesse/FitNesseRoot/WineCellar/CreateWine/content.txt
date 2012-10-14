@@ -1,7 +1,7 @@
 !2 Create a new wine
 
 !|script                                                                                                                                                                                                                                                          |
-|open     |http://localhost:8000/app/#/wines                                                                                                                                                                                                                      |
+|open     |${APP_URL}#/wines                                                                                                                                                                                                                      |
 |execute  |id:newButton                                                                                                                                                                                                                                           |
 |textfield|id:nameInput          |type|VITICCIO CLASSICO RISERVA                                                                                                                                                                                                  |
 |textfield|id:yearInput          |type|2007                                                                                                                                                                                                                       |

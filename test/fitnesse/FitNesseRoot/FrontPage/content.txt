@@ -1,1 +1,5 @@
-!1 Welcome to SelRunner
+!1 Welcome to FitNesse!
+
+|Projets|
+|[[SelRunner][SelRunner]]|Testsuite of the SelRunner Selenium bridge|
+|[[WineCellar][SelRunner]]|Testsuite of the ajaxdemo sample application|

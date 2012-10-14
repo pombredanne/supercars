@@ -2,6 +2,8 @@
 
 !define TEST_SYSTEM {slim}
 
+!define APP_URL {http://localhost:8000/}
+
 We use the classpath assembled by maven
 !path ${java.class.path}
 *!

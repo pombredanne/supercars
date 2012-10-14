@@ -1,14 +1,14 @@
 !2 Update an existing wine
 
 !|script                                       |
-|open     |http://localhost:8000/app/#/wines   |
+|open     |${APP_URL}#/wines                   |
 |execute  |link text: REX HILL                 |
 |textfield|id:countryInput|type|Planet CocaCola|
 |execute  |id:saveButton                       |
 
 verify that the wine country is changed
 !|script                                         |
-|open        |http://localhost:8000/app/#/wines  |
+|open        |${APP_URL}#/wines                  |
 |execute     |link text: REX HILL                |
 |find element|id:countryInput                    |
 |check       |get attribute|value|Planet CocaCola|
