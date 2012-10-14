@@ -1,9 +1,0 @@
-!*> Environment settings for testrunner
-
-!define TEST_SYSTEM {slim}
-
-We use the classpath assembled by maven
-!path ${java.class.path}
-*!
-
-!contents -R2 -g -p -f -h
