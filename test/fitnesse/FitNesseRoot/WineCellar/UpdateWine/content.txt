@@ -1,7 +1,9 @@
-!2 Update an existing wine
-
+landing page
 !|script                                       |
 |open     |${APP_URL}#/wines                   |
+
+update wine
+!|script                                       |
 |execute  |link text: REX HILL                 |
 |textfield|id:countryInput|type|Planet CocaCola|
 |execute  |id:saveButton                       |
@@ -12,6 +14,3 @@ verify that the wine country is changed
 |execute     |link text: REX HILL                |
 |find element|id:countryInput                    |
 |check       |get attribute|value|Planet CocaCola|
-
-!|script|
-|stop   |

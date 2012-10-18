@@ -1,5 +1,6 @@
 !-Common Technical Activities implemented as FitNesse scenarios-!
 
+textfield
 !|scenario               |textfield _ type _|id,text    |
 |wait for element present|@id                           |
 |find element            |@id                           |
@@ -7,6 +8,7 @@
 |type                    |@text                         |
 |check                   |get attribute     |value|@text|
 
+execute link or button
 !|scenario               |execute|id|
 |wait for element present|@id       |
 |find element            |@id       |

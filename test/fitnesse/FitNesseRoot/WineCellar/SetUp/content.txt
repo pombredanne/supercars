@@ -3,3 +3,5 @@
 
 !|script             |
 |start|firefox runner|
+
+!note You need to start the application (restserver.sh start) before you can run the test!

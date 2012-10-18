@@ -1,7 +1,9 @@
-!2 Create a new wine
+landing page
+!|script               |
+|open|${APP_URL}#/wines|
 
+create new wine
 !|script                                                                                                                                                                                                                                                          |
-|open     |${APP_URL}#/wines                                                                                                                                                                                                                      |
 |execute  |id:newButton                                                                                                                                                                                                                                           |
 |textfield|id:nameInput          |type|VITICCIO CLASSICO RISERVA                                                                                                                                                                                                  |
 |textfield|id:yearInput          |type|2007                                                                                                                                                                                                                       |
@@ -12,10 +14,7 @@
 |textfield|id:imageInput         |type|viticcio.jpg                                                                                                                                                                                                               |
 |execute  |id:saveButton                                                                                                                                                                                                                                          |
 
-verify that the new wine is contained
+verify that the new wine is contained in the list
 !|script                                             |
 |find element|id:sidebar                             |
 |ensure      |contains text|VITICCIO CLASSICO RISERVA|
-
-!|script|
-|stop   |
