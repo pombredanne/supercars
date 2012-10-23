@@ -25,7 +25,8 @@ describe('ajaxdemo controllers', function() {
 
   beforeEach(module('cellar.services'));
 
-  beforeEach(inject(function(_$httpBackend_, $rootScope, $location, $routeParams, $controller) {
+  beforeEach(inject(function(_$httpBackend_, $rootScope, $location, 
+      $routeParams, $controller) {
     $httpBackend = _$httpBackend_;
     location = $location;
     routeParams = $routeParams;
