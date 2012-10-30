@@ -1,0 +1,42 @@
+<div class="form-left-col">
+    <label>Id:</label>
+    <input id="idInput" type="text" ng-model="supercar._id" disabled />
+
+    <label>Name:</label>
+    <input id="nameInput" type="text" ng-model="supercar.name" required/>
+
+    <label>Country:</label>
+    <input id="countryInput" type="text" ng-model="supercar.country" />
+
+    <label>Top Speed:</label>
+    <input id="topSpeedInput" type="text" ng-model="supercar.top_speed" />
+
+    <label>0-60 mph:</label>
+    <input id="0-60Input" type="text" ng-model="supercar.0-60" />
+
+    <label>Power:</label>
+    <input id="0-60Input" type="text" ng-model="supercar.power" />
+
+    <label>Engine cc:</label>
+    <input id="0-60Input" type="text" ng-model="supercar.engine" />
+
+    <label>Weight:</label>
+    <input id="0-60Input" type="text" ng-model="supercar.weight" />
+
+    <label>Image file:</label>
+    <input id="imageInput" type="text" ng-model="supercar.image" />
+
+    <button id="saveButton" class="save" ng:click="saveSupercar()">
+        Save</button>
+    <button id="deleteButton" class="delete" ng:click="deleteSupercar()">
+        Delete</button>
+</div>
+
+<div class="form-right-col">
+    <img width="250" height="300" src="img/{{ supercar.image }}" 
+        onerror="this.src='img/generic.jpg'"/>
+
+    <label>Notes:</label>
+    <textarea id="descriptionTextarea" ng-model="supercar.description" />
+
+</div>

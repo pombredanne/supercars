@@ -29,11 +29,14 @@ class TestGetMethod(HttpServerTestBase):
         self.thread.server.do_HEAD = MagicMock()
         self.thread.server.send_error = MagicMock()
 
+        self.maxDiff = None
+
+
     def test_get_one_record(self):
         response = self.request(
-            "http://localhost/rest/cellar/wines/00001",
+            "http://localhost/rest/supercars/00001",
             method="GET")
-        expected = {"_id": "00001", "name": "BLOCK NINE", "year": "2009", "grapes": "Pinot Noir", "country": "USA", "region": "California", "description": "With hints of ginger and spice, this wine makes an excellent complement to light appetizer and dessert fare for a holiday gathering.", "image": "block_nine.jpg"}
+        expected = {"_id":"00001","name":"AC Cobra","country":"United States","top_speed":"160","0-60":"4.2","power":"485","engine":"6997","weight":"1148","description":"The AC Cobra, sold as the Ford/Shelby AC Cobra in the USA and often known colloquially as the Shelby Cobra in that country, is an American-engined British sports car produced intermittently since 1962.","image":"005.png"}
         try:
             assert_equal(json.loads(response.read()), expected)
             self.thread.server.do_HEAD.assert_called_once()
@@ -42,13 +45,13 @@ class TestGetMethod(HttpServerTestBase):
 
     def test_get_list_of_records(self):
         response = self.request(
-            "http://localhost/rest/cellar/wines",
+            "http://localhost/rest/supercars/",
             method="GET")
         try:
-            wines = json.loads(response.read())
-            print wines
-            assert_equal(len(wines), 10)
-            assert_equal(wines[0]['name'], 'OWEN ROE "EX UMBRIS"')
+            supercars = json.loads(response.read())
+            print supercars
+            assert_equal(len(supercars), 1)
+            assert_equal(supercars[0]['name'], 'AC Cobra')
             self.thread.server.do_HEAD.assert_called_once()
         finally:
             response.close()

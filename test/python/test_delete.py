@@ -27,14 +27,14 @@ class TestDeleteMethod(HttpServerTestBase):
 
     def test_delete_record(self):
         response = self.request(
-            'http://localhost/rest/cellar/wines/00002',
+            'http://localhost/rest/supercars/00002',
             method="DELETE")
         try:
             assert_equal(response.read(), '')
             self.thread.server.do_HEAD.assert_called_once()
             # verify changes are visible in GET request
             response = self.request(
-            "http://localhost/rest/cellar/wines/00002",
+            "http://localhost/rest/supercars/00002",
             method="GET")
             assert_equal(response.read(), '<head>\n<title>Error response</title>\n</head>\n<body>\n<h1>Error response</h1>\n<p>Error code 404.\n<p>Message: Invalid record id.\n<p>Error code explanation: 404 = Nothing matches the given URI.\n</body>\n')
         finally:
@@ -42,7 +42,7 @@ class TestDeleteMethod(HttpServerTestBase):
 
     def test_delete_non_existant(self):
         response = self.request(
-            'http://localhost/rest/cellar/wines/00050',
+            'http://localhost/rest/supercars/00050',
             method="DELETE")
         try:
             assert_equal(response.read(), '<head>\n<title>Error response</title>\n</head>\n<body>\n<h1>Error response</h1>\n<p>Error code 404.\n<p>Message: record does not exist.\n<p>Error code explanation: 404 = Nothing matches the given URI.\n</body>\n')
@@ -55,7 +55,7 @@ class TestDeleteMethod(HttpServerTestBase):
             'http://localhost/something/else',
             method="DELETE")
         try:
-            assert_equal(response.read(), '<head>\n<title>Error response</title>\n</head>\n<body>\n<h1>Error response</h1>\n<p>Error code 404.\n<p>Message: Use existing /rest/database/table/_id for document access.\n<p>Error code explanation: 404 = Nothing matches the given URI.\n</body>\n')
+            assert_equal(response.read(), '<head>\n<title>Error response</title>\n</head>\n<body>\n<h1>Error response</h1>\n<p>Error code 404.\n<p>Message: Use existing /rest/supercars/_id for document access.\n<p>Error code explanation: 404 = Nothing matches the given URI.\n</body>\n')
             self.thread.server.do_HEAD.assert_called_once()
             self.thread.server.send_error.assert_called_once()
         finally:

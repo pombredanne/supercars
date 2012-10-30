@@ -14,6 +14,7 @@ class TestServerThread(threading.Thread):
         self.test_object = test_object
         self.test_object.lock.acquire()
 
+
     def run(self):
         self.server = HTTPServer(('', 0), self.request_handler)
         self.test_object.PORT = self.server.socket.getsockname()[1]

@@ -19,17 +19,20 @@ __version__ = "0.1"
 SERVER_HOST = 'localhost'
 SERVER_PORT = 8000
 SERVER_APIPREFIX = 'rest'
-WINECELLAR_FILE = here('winecellar.json')
+SUPERCARS_FILE = here('supercars.json')
+#SUPERCARS_FILE = here('winecellar.json')
 
 
-#class RestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 class RestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
-    wines = {}  # store the wines
-    conf = {'seq': 1}  # unique id for the next wine entry
+    supercars = {}  # store the supercars
+    conf = {'seq': 1}  # unique id for the next supercar entry
 
     def __init__(self, *args, **kwargs):
-        if not self.wines:
-            self.load_wines(WINECELLAR_FILE)
+        #print 'moin'
+        #self.supercars = {}
+        #self.conf = {'seq': 1}  # unique id for the next supercar entry
+        if not(len(self.supercars)):
+            self.load_supercars(SUPERCARS_FILE)
         SimpleHTTPServer.SimpleHTTPRequestHandler.__init__(self, *args, **kwargs)
 
     def do_HEAD(self):
@@ -40,28 +43,30 @@ class RestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     def do_GET(self):
         """Respond to a GET request."""
         # Example (using cURL):
-        # curl -X GET 'http://localhost:8000/rest/cellar/wines/'
+        # curl -X GET 'http://localhost:8000/rest/supercars/'
         url = urlparse.urlparse(self.path)
         path_elements = url.path.strip('/').split('/')
+        print 'path_elements: %s' % path_elements
+        print 'supercars: %s' % self.supercars
         if path_elements[0] != SERVER_APIPREFIX:
             SimpleHTTPServer.SimpleHTTPRequestHandler.do_GET(self)
-        elif path_elements[1] != 'cellar' or path_elements[2] != 'wines':
+        elif path_elements[1] != 'supercars':
             self.send_error(404,
-                'Use existing /%s/database/table/_id for document access'
+                'Use existing /%s/supercars/_id for document access'
                     % SERVER_APIPREFIX)
-        elif len(path_elements) == 3:
-            api, database, table = path_elements
+        elif len(path_elements) == 2:
+            api, table = path_elements
             self.do_HEAD()
             self.wfile.write('[')
-            for i, r in enumerate(self.wines):
+            for i, r in enumerate(self.supercars):
                 if i != 0:
                     self.wfile.write(',')
-                self.wfile.write(json.dumps(self.wines[r]))
+                self.wfile.write(json.dumps(self.supercars[r]))
             self.wfile.write(']')
-        elif len(path_elements) == 4:
-            api, database, table, oid = path_elements
+        elif len(path_elements) == 3:
+            api, table, oid = path_elements
             try:
-                result = self.wines[oid]
+                result = self.supercars[oid]
                 self.do_HEAD()
                 if result:
                     #result['_id'] = str(result['_id'])
@@ -70,29 +75,30 @@ class RestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
                 self.send_error(404, 'Invalid record id')
         else:
             self.send_error(404,
-                'Use existing /%s/database/table/_id for document access'
+                'Use existing /%s/supercars/_id for document access'
                     % SERVER_APIPREFIX)
 
     def do_POST(self):
         """Respond to a POST request."""
         # Example (using cURL):
-        # curl -X POST -d '{"name":"BODEGA LURTON","year":"2011","grapes":"Pinot Gris","country":"Argentina","region":"Mendoza","description":"Solid notes of black currant blended with a light citrus make this wine an easy pour for varied palates."}' 'http://localhost:8000/rest/cellar/wines/'
+        # curl -X POST -d '{"name":"Ferrari Enzo","country":"Italy","top_speed":"218","0-60":"3.4","power":"650","engine":"5998","weight":"1365","description":"The Enzo Ferrari is a 12 cylinder mid-engine berlinetta named after the company\"s founder, Enzo Ferrari.","image":"050.png"}' 'http://localhost:8000/rest/supercars/'
 
         url = urlparse.urlparse(self.path)
         path_elements = url.path.strip('/').split('/')
-        if path_elements[1] != 'cellar' or path_elements[2] != 'wines':
+        print 'path_elements: %s' % path_elements
+        if path_elements[1] != 'supercars':
             self.send_error(404,
-                'Use existing /%s/database/table/_id for document access'
+                'Use existing /%s/supercars/_id for document access'
                     % SERVER_APIPREFIX)
-        elif len(path_elements) == 3:
-            api, database, table = path_elements
+        elif len(path_elements) == 2:
+            api, table = path_elements
             content_len = int(self.headers.getheader('content-length'))
             try:
                 data = json.loads(self.rfile.read(content_len))
                 if data:
                     oid = self.next_id()
                     data['_id'] = oid
-                    self.wines[oid] = data
+                    self.supercars[oid] = data
                     self.do_HEAD()
                     if oid:
                         self.wfile.write('{"_id": "%s"}' % oid)
@@ -102,58 +108,58 @@ class RestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
                 self.send_error(400, 'Invalid data')
         else:
             self.send_error(404,
-                'Use existing /%s/database/table/ to create documents'
+                'Use existing /%s/supercars/ to create documents'
                     % SERVER_APIPREFIX)
 
     def do_PUT(self):
         """Respond to a PUT request."""
         # Example (using cURL):
-        # curl -X PUT -d '{"name":"CHATEAU DE SAINT COSME","year":"2009","grapes":"Grenache / Syrah","country":"France","region":"Southern Rhone / Gigondas","description":"The aromas of fruit and spice give one a hint of the light drinkability of this lovely wine, which makes an excellent complement to fish dishes."}' 'http://localhost:8000/rest/cellar/wines/4fb8ad99b0ab584586000000'
+        # curl -X PUT -d '{TODO}' 'http://localhost:8000/rest/supercars/4fb8ad99b0ab584586000000'
 
         url = urlparse.urlparse(self.path)
         path_elements = url.path.strip('/').split('/')
-        if path_elements[1] != 'cellar' or path_elements[2] != 'wines':
+        if path_elements[1] != 'supercars':
             self.send_error(404,
-                'Use existing /%s/database/table/_id for document access'
+                'Use existing /%s/supercars/_id for document access'
                     % SERVER_APIPREFIX)
-        elif len(path_elements) == 4:
-            api, database, table, oid = path_elements
+        elif len(path_elements) == 3:
+            api, table, oid = path_elements
             content_len = int(self.headers.getheader('content-length'))
             try:
                 data = json.loads(self.rfile.read(content_len))
                 if data:
                     data['_id'] = oid
-                    self.wines[oid] = data
+                    self.supercars[oid] = data
                     self.do_HEAD()
             except ValueError:
                 self.send_error(400, 'Invalid data')
         else:
             self.send_error(404,
-                'Use existing /%s/database/table/_id/ for updating a document'
+                'Use existing /%s/supercars/_id/ for updating a document'
                     % SERVER_APIPREFIX)
 
     def do_DELETE(self):
         """Respond to a DELETE request."""
         # Example (using cURL):
-        # curl -X DELETE 'http://localhost:8000/rest/cellar/wines/4fb8a590b0ab582e8e000001'
+        # curl -X DELETE 'http://localhost:8000/rest/supercars/4fb8a590b0ab582e8e000001'
 
         url = urlparse.urlparse(self.path)
         path_elements = url.path.strip('/').split('/')
-        if path_elements[1] != 'cellar' or path_elements[2] != 'wines':
+        if path_elements[1] != 'supercars':
             self.send_error(404,
-                'Use existing /%s/database/table/_id for document access'
+                'Use existing /%s/supercars/_id for document access'
                     % SERVER_APIPREFIX)
-        elif len(path_elements) == 4:
-            api, database, table, oid = path_elements
-            if oid in self.wines:
-                self.wines.pop(oid)
+        elif len(path_elements) == 3:
+            api, table, oid = path_elements
+            if oid in self.supercars:
+                self.supercars.pop(oid)
                 self.do_HEAD()
             else:
                 self.send_error(404,
                     'record does not exist')
         else:
             self.send_error(404,
-                'Use existing /%s/database/table/_id/ to delete documents'
+                'Use existing /%s/supercars/_id/ to delete documents'
                     % SERVER_APIPREFIX)
 
     def log_message(self, format, *args):
@@ -166,15 +172,16 @@ class RestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         self.conf['seq'] += 1
         return res
 
-    def load_wines(self, filename):
-        """Load wine cellar from json file"""
+    def load_supercars(self, filename):
+        """Load supercars from json file"""
         f = open(filename)
         data = json.loads("".join(f.readlines()))
+        #print 'data: %s' % data
         f.close()
         for d in data:
             oid = self.next_id()
             d['_id'] = oid
-            self.wines[oid] = d
+            self.supercars[oid] = d
 
 
 if __name__ == '__main__':

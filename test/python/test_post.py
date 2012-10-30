@@ -26,20 +26,20 @@ class TestPostMethod(HttpServerTestBase):
         self.thread.server.send_error = MagicMock()
 
     def test_post_new_record(self):
-        new_record = '{"name":"VITICCIO CLASSICO RISERVA","year":"2007","grapes":"Sangiovese Merlot","country":"Italy","region":"Tuscany","description":"Though soft and rounded in texture, the body of this wine is full and rich and oh-so-appealing. This delivery is even more impressive when one takes note of the tender tannins that leave the taste buds wholly satisfied.","image":"viticcio.jpg"}'
+        new_record = '''{"name":"Ferrari Enzo","country":"Italy","top_speed":"218","0-60":"3.4","power":"650","engine":"5998","weight":"1365","description":"The Enzo Ferrari is a 12 cylinder mid-engine berlinetta named after the company's founder, Enzo Ferrari.","image":"050.png"}'''
 
         response = self.request(
-            'http://localhost/rest/cellar/wines/',
+            'http://localhost/rest/supercars/',
             method="POST", body=new_record)
         try:
-            assert_equal(response.read(), '{"_id": "00012"}')
+            assert_equal(response.read(), '{"_id": "00003"}')
             self.thread.server.do_HEAD.assert_called_once()
             # verify changes are visible in GET request
             response = self.request(
-            "http://localhost/rest/cellar/wines/00012",
+            "http://localhost/rest/supercars/00003",
             method="GET")
             expected = json.loads(new_record)
-            expected['_id'] = '00012'
+            expected['_id'] = '00003'
             assert_equal(json.loads(response.read()), expected)
         finally:
             response.close()
@@ -50,7 +50,7 @@ class TestPostMethod(HttpServerTestBase):
             'http://localhost/something/else',
             method="POST", body='something here')
         try:
-            assert_equal(response.read(), '<head>\n<title>Error response</title>\n</head>\n<body>\n<h1>Error response</h1>\n<p>Error code 404.\n<p>Message: Use existing /rest/database/table/_id for document access.\n<p>Error code explanation: 404 = Nothing matches the given URI.\n</body>\n')
+            assert_equal(response.read(), '<head>\n<title>Error response</title>\n</head>\n<body>\n<h1>Error response</h1>\n<p>Error code 404.\n<p>Message: Use existing /rest/supercars/_id for document access.\n<p>Error code explanation: 404 = Nothing matches the given URI.\n</body>\n')
             self.thread.server.do_HEAD.assert_called_once()
             self.thread.server.send_error.assert_called_once()
         finally:

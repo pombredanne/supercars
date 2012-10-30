@@ -2,44 +2,43 @@
 
 /* Controllers */
 
-function WineListCtrl($scope, $location, Wine) {
-    $scope.wines = Wine.list();
+function SupercarListCtrl($scope, $location, Wine) {
+    $scope.supercars = Wine.list();
 
-    $scope.addWine = function () {
-        $location.path('/wines/new');
+    $scope.addSupercar = function () {
+        $location.path('/supercars/new');
     };
 }
 
 
-function WineDetailsCtrl($scope, $location, $routeParams, Wine) {
-    // nested controller to WineListCtrl so it can do updates
-    if ($routeParams.wineId === 'new') {
-        $scope.wine = new Wine(); 
+function SupercarDetailsCtrl($scope, $location, $routeParams, Wine) {
+    // nested controller to SupercarListCtrl so it can do updates
+    if ($routeParams.supercarId === 'new') {
+        $scope.supercars = new Supercars(); 
     } else {
-        $scope.wine = Wine.get({id: $routeParams.wineId});
+        $scope.supercars = Supercars.get({id: $routeParams.supercarId});
     }
 
-    $scope.saveWine = function () {
-        if ($scope.wine._id === undefined)
-            $scope.wine.$save(function(wine) {
-                // update the wine list in the parent scope
-                $scope.$parent.wines = Wine.list();
-                $location.path('/wines/' + wine._id);
+    $scope.saveSupercar = function () {
+        if ($scope.supercar._id === undefined)
+            $scope.supercar.$save(function(wine) {
+                // update the supercar list in the parent scope
+                $scope.$parent.supercars = Supercars.list();
+                $location.path('/supercars/' + supercar._id);
             });
         else
-            $scope.wine.$update(function(wine) {
+            $scope.supercar.$update(function(wine) {
                 // update the list since it is possible to update the name
-                $scope.$parent.wines = Wine.list();
-                $location.path('/wines/' + wine._id);
+                $scope.$parent.supercars = Supercars.list();
+                $location.path('/supercars/' + supercar._id);
             });
     };
 
-    $scope.deleteWine = function () {
-        $scope.wine.$remove(function() {
-            // update the wine list in the parent scope
-            $scope.$parent.wines = Wine.list();
-            $location.path('/wines');
+    $scope.deleteSupercar = function () {
+        $scope.supercar.$remove(function() {
+            // update the supercar list in the parent scope
+            $scope.$parent.supercars = Supercars.list();
+            $location.path('/supercars');
         });
     };
-
 }

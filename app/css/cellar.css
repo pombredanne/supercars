@@ -1,12 +1,13 @@
 * {
+  //background-color: #cfcfcf;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 18px;
 }
 
 #header {
   padding-top: 5px;
-    padding-bottom: 10px;
-    border-bottom: solid 1px #AAAAAA;
+  padding-bottom: 10px;
+  border-bottom: solid 1px #AAAAAA;
 }
 
 #sidebar {
@@ -20,11 +21,11 @@
 }
 
 #content {
-    position: absolute;
-    top: 80px;
-    bottom: 20px;
-    left:300px;
-    right:20px;
+  position: absolute;
+  top: 80px;
+  bottom: 20px;
+  left:300px;
+  right:20px;
 }
 
 .form-left-col {
@@ -50,8 +51,8 @@ li a {
 }
 
 li a:hover {
-  background-color: #4B0A1E;
-  color: #BA8A92;
+  background-color: #3f3f3f;
+  color: #ffffff;
 }
 
 input, textarea {
@@ -68,9 +69,9 @@ input, textarea {
 
 textarea {
   margin-bottom:15px;
-    margin-top:5px;
+  margin-top:5px;
   height: 160px;
-    width:250px;
+  width:250px;
 }
 
 label {
