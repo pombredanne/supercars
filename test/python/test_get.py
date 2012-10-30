@@ -50,8 +50,8 @@ class TestGetMethod(HttpServerTestBase):
         try:
             supercars = json.loads(response.read())
             print supercars
-            assert_equal(len(supercars), 1)
-            assert_equal(supercars[0]['name'], 'AC Cobra')
+            assert_equal(len(supercars), 30)
+            assert_equal(supercars[0]['name'], 'Noble M12 GTO3R')
             self.thread.server.do_HEAD.assert_called_once()
         finally:
             response.close()

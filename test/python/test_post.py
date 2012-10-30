@@ -32,14 +32,14 @@ class TestPostMethod(HttpServerTestBase):
             'http://localhost/rest/supercars/',
             method="POST", body=new_record)
         try:
-            assert_equal(response.read(), '{"_id": "00003"}')
+            assert_equal(response.read(), '{"_id": "00032"}')
             self.thread.server.do_HEAD.assert_called_once()
             # verify changes are visible in GET request
             response = self.request(
-            "http://localhost/rest/supercars/00003",
+            "http://localhost/rest/supercars/00032",
             method="GET")
             expected = json.loads(new_record)
-            expected['_id'] = '00003'
+            expected['_id'] = '00032'
             assert_equal(json.loads(response.read()), expected)
         finally:
             response.close()
