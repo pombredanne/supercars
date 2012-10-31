@@ -1,0 +1,16 @@
+landing page
+!|script                   |
+|open|${APP_URL}#/supercars|
+
+update supercar
+!|script                               |
+|execute  |link text: BMW M3 CSL       |
+|textfield|id:countryInput|type|Bavaria|
+|execute  |id:saveButton               |
+
+verify that the supercar country is changed
+!|script                                 |
+|open        |${APP_URL}#/supercars      |
+|execute     |link text: BMW M3 CSL      |
+|find element|id:countryInput            |
+|check       |get attribute|value|Bavaria|

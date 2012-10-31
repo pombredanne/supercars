@@ -1,0 +1,14 @@
+landing page
+!|script                   |
+|open|${APP_URL}#/supercars|
+
+delete supercar
+!|script                    |
+|execute|link text: AC Cobra|
+|execute|id:deleteButton    |
+
+verify that the supercar record is gone
+!|script                            |
+|open        |${APP_URL}#/supercars |
+|find element|id:sidebar            |
+|reject      |contains text|AC Cobra|
