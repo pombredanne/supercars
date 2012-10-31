@@ -2,8 +2,8 @@
 
 /* Controllers */
 
-function SupercarListCtrl($scope, $location, Wine) {
-    $scope.supercars = Wine.list();
+function SupercarListCtrl($scope, $location, Supercars) {
+    $scope.supercars = Supercars.list();
 
     $scope.addSupercar = function () {
         $location.path('/supercars/new');
@@ -11,23 +11,23 @@ function SupercarListCtrl($scope, $location, Wine) {
 }
 
 
-function SupercarDetailsCtrl($scope, $location, $routeParams, Wine) {
+function SupercarDetailsCtrl($scope, $location, $routeParams, Supercars) {
     // nested controller to SupercarListCtrl so it can do updates
     if ($routeParams.supercarId === 'new') {
-        $scope.supercars = new Supercars(); 
+        $scope.supercar = new Supercars(); 
     } else {
-        $scope.supercars = Supercars.get({id: $routeParams.supercarId});
+        $scope.supercar = Supercars.get({id: $routeParams.supercarId});
     }
 
     $scope.saveSupercar = function () {
         if ($scope.supercar._id === undefined)
-            $scope.supercar.$save(function(wine) {
+            $scope.supercar.$save(function(supercar) {
                 // update the supercar list in the parent scope
                 $scope.$parent.supercars = Supercars.list();
                 $location.path('/supercars/' + supercar._id);
             });
         else
-            $scope.supercar.$update(function(wine) {
+            $scope.supercar.$update(function(supercar) {
                 // update the list since it is possible to update the name
                 $scope.$parent.supercars = Supercars.list();
                 $location.path('/supercars/' + supercar._id);

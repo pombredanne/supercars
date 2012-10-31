@@ -1,18 +1,18 @@
-'use strict'; 
+'use strict';
 
 /* jasmine specs for controllers go here */
 describe('ajaxdemo controllers', function() {
   var scope, location, routeParams, $httpBackend, controller;
-  var wineDetails = function() {
+  var supercarDetails = function() {
       return {
-          "name":"BLOCK NINE",
-          "year":"2009",
-          "grapes":"Pinot Noir",
-          "country":"USA"
+          "name":"AC Cobra",
+          "country":"United States",
+          "top_speed":"160",
+          "power":"485"
       };
   };
-  var wineList = function() {
-    return [{"name":"BLOCK NINE"},{"name":"BODEGA LURTON"}];
+  var supercarList = function() {
+    return [{"name":"AC Cobra"},{"name":"Aston Martin DB9"}];
   };
 
   beforeEach(function(){
@@ -23,7 +23,7 @@ describe('ajaxdemo controllers', function() {
     });
   });
 
-  beforeEach(module('cellar.services'));
+  beforeEach(module('supercars.services'));
 
   beforeEach(inject(function(_$httpBackend_, $rootScope, $location, 
       $routeParams, $controller) {
@@ -40,119 +40,119 @@ describe('ajaxdemo controllers', function() {
   });
 
 
-  describe('WineListCtrl', function() {
+  describe('SupercarListCtrl', function() {
 
-    it('should change location when calling addWine', function() {
-      $httpBackend.expectGET('/rest/cellar/wines').respond(wineList());
-      controller(WineListCtrl, {$scope: scope});
+    it('should change location when calling addSupercar', function() {
+      $httpBackend.expectGET('/rest/supercars').respond(supercarList());
+      controller(SupercarListCtrl, {$scope: scope});
       $httpBackend.flush();
 
       spyOn(location, 'path').andCallThrough();
-      scope.addWine();
-      expect(location.path).wasCalledWith('/wines/new');
+      scope.addSupercar();
+      expect(location.path).wasCalledWith('/supercars/new');
     });
 
 
-    it('should retrieve "wines" from backend call', function() {
-      $httpBackend.expectGET('/rest/cellar/wines').respond(wineList());
-      controller(WineListCtrl, {$scope: scope});
+    it('should retrieve "supercars" from backend call', function() {
+      $httpBackend.expectGET('/rest/supercars').respond(supercarList());
+      controller(SupercarListCtrl, {$scope: scope});
       $httpBackend.flush();
 
-      expect(scope.wines).toEqualData(wineList());
+      expect(scope.supercars).toEqualData(supercarList());
     });
   });
 
 
-  describe('WineDetailsCtrl', function() {
+  describe('SupercarDetailsCtrl', function() {
 
-    it('should fetch wine detail for given wineId', function() {
-      routeParams.wineId = 'xyz';
-      $httpBackend.expectGET('/rest/cellar/wines/xyz').respond(wineDetails());
-      controller(WineDetailsCtrl, {$scope: scope});
+    it('should fetch supercar detail for given supercarId', function() {
+      routeParams.supercarId = 'xyz';
+      $httpBackend.expectGET('/rest/supercars/xyz').respond(supercarDetails());
+      controller(SupercarDetailsCtrl, {$scope: scope});
 
-      expect(scope.wine).toEqualData({});
+      expect(scope.supercar).toEqualData({});
       $httpBackend.flush();
 
-      expect(scope.wine).toEqualData(wineDetails());
+      expect(scope.supercar).toEqualData(supercarDetails());
     });
 
 
-    it('should not fetch wine detail for new wine', function() {
-      routeParams.wineId = 'new';
-      controller(WineDetailsCtrl, {$scope: scope});
+    it('should not fetch supercar detail for new supercar', function() {
+      routeParams.supercarId = 'new';
+      controller(SupercarDetailsCtrl, {$scope: scope});
 
-      expect(scope.wine).toEqualData({});
+      expect(scope.supercar).toEqualData({});
       // make sure that no request was triggered
       $httpBackend.verifyNoOutstandingRequest();
     });
 
 
-    it('should update the parent controller when invoking saveWine with undefined _id', function() {
-      routeParams.wineId = 'new';
-      controller(WineDetailsCtrl, {$scope: scope});
-      expect(scope.wine).toEqualData({});
+    it('should update the parent controller when invoking saveSupercar with undefined _id', function() {
+      routeParams.supercarId = 'new';
+      controller(SupercarDetailsCtrl, {$scope: scope});
+      expect(scope.supercar).toEqualData({});
 
-      $httpBackend.expectPOST('/rest/cellar/wines').respond({'_id': '8888'});
-      $httpBackend.expectGET('/rest/cellar/wines').respond(wineList());
+      $httpBackend.expectPOST('/rest/supercars').respond({'_id': '8888'});
+      $httpBackend.expectGET('/rest/supercars').respond(supercarList());
 
       spyOn(location, 'path').andCallThrough();
 
-      scope.saveWine();
+      scope.saveSupercar();
       $httpBackend.flush();
-      expect(location.path).wasCalledWith('/wines/8888');
+      expect(location.path).wasCalledWith('/supercars/8888');
 
-      expect(scope.$parent.wines).toEqualData(wineList());
-      expect(scope.wine).toEqualData({'_id': '8888'});
+      expect(scope.$parent.supercars).toEqualData(supercarList());
+      expect(scope.supercar).toEqualData({'_id': '8888'});
     });
  
 
-    it('should not update the parent controller when invoking saveWine with _id', function() {
-      var result = wineDetails();
+    it('should not update the parent controller when invoking saveSupercar with _id', function() {
+      var result = supercarDetails();
       result['_id'] = 'xyz';
 
-      routeParams.wineId = 'xyz';
-      $httpBackend.expectGET('/rest/cellar/wines/xyz').respond(wineDetails());
+      routeParams.supercarId = 'xyz';
+      $httpBackend.expectGET('/rest/supercars/xyz').respond(supercarDetails());
 
-      controller(WineDetailsCtrl, {$scope: scope});
+      controller(SupercarDetailsCtrl, {$scope: scope});
       $httpBackend.flush();
-      scope.wine._id = 'xyz';
+      scope.supercar._id = 'xyz';
 
-      $httpBackend.expectPUT('/rest/cellar/wines/xyz', result).respond();
-      $httpBackend.expectGET('/rest/cellar/wines').respond(wineList());
+      $httpBackend.expectPUT('/rest/supercars/xyz', result).respond();
+      $httpBackend.expectGET('/rest/supercars').respond(supercarList());
 
       spyOn(location, 'path');
 
-      scope.saveWine();
+      scope.saveSupercar();
       $httpBackend.flush();
-      expect(location.path).wasCalledWith('/wines/xyz');
+      expect(location.path).wasCalledWith('/supercars/xyz');
 
-      expect(scope.wine).toEqualData(result);
+      expect(scope.supercar).toEqualData(result);
     });
  
 
-    it('should update the parent controller when invoking deleteWine', function() {
-      //var result = wineDetails();
+    it('should update the parent controller when invoking deleteSupercar', function() {
+      //var result = supercarDetails();
       //result['_id'] = 'xyz';
 
-      routeParams.wineId = 'xyz';
-      $httpBackend.expectGET('/rest/cellar/wines/xyz').respond(wineDetails());
-      controller(WineDetailsCtrl, {$scope: scope});
+      routeParams.supercarId = 'xyz';
+      $httpBackend.expectGET('/rest/supercars/xyz').respond(supercarDetails());
+      controller(SupercarDetailsCtrl, {$scope: scope});
       $httpBackend.flush();
-      expect(scope.wine).toEqualData(wineDetails());
-      scope.wine._id = 'xyz';
-      //expect(scope.wine).toEqualData(result);
+      expect(scope.supercar).toEqualData(supercarDetails());
+      scope.supercar._id = 'xyz';
+      //expect(scope.supercar).toEqualData(result);
 
-      $httpBackend.expectDELETE('/rest/cellar/wines/xyz').respond(200, '');
-      $httpBackend.expectGET('/rest/cellar/wines').respond(wineList());
+      $httpBackend.expectDELETE('/rest/supercars/xyz').respond(200, '');
+      $httpBackend.expectGET('/rest/supercars').respond(supercarList());
 
-      spyOn(scope.wine, '$remove').andCallThrough();
+      spyOn(scope.supercar, '$remove').andCallThrough();
       spyOn(location, 'path').andCallThrough();
 
-      scope.deleteWine();
+      scope.deleteSupercar();
       $httpBackend.flush();
-      expect(location.path).wasCalledWith('/wines');
-      expect(scope.wine.$remove).wasCalled();
-      expect(scope.$parent.wines).toEqualData(wineList());
+      expect(location.path).wasCalledWith('/supercars');
+      expect(scope.supercar.$remove).wasCalled();
+      expect(scope.$parent.supercars).toEqualData(supercarList());
     });
   });
 

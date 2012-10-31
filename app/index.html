@@ -1,24 +1,24 @@
 <!doctype html>
-<html lang="en" ng-app="cellar">
+<html lang="en" ng-app="supercars">
 <head>
   <meta charset="utf-8">
-  <title>Ajaxdemo Wine Celllar</title>
-  <link rel="stylesheet" href="css/cellar.css"/>
+  <title>Ajaxdemo Supercars</title>
+  <link rel="stylesheet" href="css/supercars.css"/>
 </head>
-<body ng:controller="WineListCtrl">
+<body ng:controller="SupercarListCtrl">
   <div id="header">
-    Ajaxdemo Wine Cellar
-    <button id="newButton" ng:click="addWine()">New Wine</button>
+    Ajaxdemo Supercars
+    <button id="newButton" ng:click="addSupercar()">Add Supercar</button>
   </div>
 
-  <div id="sidebar" ng:include="'partials/wine-list.html'"></div>
+  <div id="sidebar" ng:include="'partials/supercar-list.html'"></div>
 
   <div id="content">
     <ng:view></ng:view>
   </div>
 
   <script src="lib/angular/angular.js"></script>
-  <script src="js/cellar.js"></script>
+  <script src="js/supercars.js"></script>
   <script src="js/services.js"></script>
   <script src="js/controllers.js"></script>
   <script src="js/filters.js"></script>
