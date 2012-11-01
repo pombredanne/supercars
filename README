@@ -24,10 +24,11 @@ Debugging in Developer Tools
 
 Select an element and type the following into the console "angular.element($0).scope()".
 
-Restful webserver restserver
-============================
 
-For demonstration I wrote a small webserver based on SimpleHTTPServer. This server is used to both serve the restful webservice and the application itself in order to comply with the same origin policy of the browsers.
+Restful Service
+===============
+
+For demonstration I wrote a small RESTful service based on SimpleHTTPServer. This server is used to both serve the restful webservice and the application itself in order to comply with the same origin policy of the browsers.
 
 
 Interface for a restful webservice
@@ -44,7 +45,7 @@ This means using the HTTP protocol as it is intended.
 Installing ajaxdemo and tools
 -----------------------------
 
-All you need is a Python installation. If you are going to use the backend based on mongodb you will need a running mongodb server listening on port 27017.
+All you need is a Python installation.
 
 
 Working on Jasmine-Unit-Tests
@@ -61,14 +62,6 @@ Run ajaxdemo
 ------------
 
 python ./scripts/restserver.py
-
-
-Populate the database (in case you use the mongodb version of the backend)
---------------------------------------------------------------------------
-
-Once the restserver is running you can populate the database using curl.
-
-./scripts/populate.sh
 
 
 Visit the Wine Cellar demo app
