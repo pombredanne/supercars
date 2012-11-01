@@ -11,6 +11,7 @@ import urlparse
 import json
 import os
 import sys
+from collections import OrderedDict
 
 
 here = lambda x: os.path.abspath(os.path.join(os.path.dirname(__file__), x))
@@ -24,7 +25,7 @@ SUPERCARS_FILE = here('supercars.json')
 
 
 class RestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
-    supercars = {}  # store the supercars
+    supercars = OrderedDict() #{}  # store the supercars
     conf = {'seq': 1}  # unique id for the next supercar entry
 
     def __init__(self, *args, **kwargs):

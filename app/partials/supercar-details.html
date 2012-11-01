@@ -8,20 +8,20 @@
     <label>Country:</label>
     <input id="countryInput" type="text" ng-model="supercar.country" />
 
-    <label>Top Speed:</label>
+    <label>Top Speed (mph):</label>
     <input id="topSpeedInput" type="text" ng-model="supercar.top_speed" />
 
-    <label>Power:</label>
+    <label>Power (bph):</label>
     <input id="powerInput" type="text" ng-model="supercar.power" />
 
-    <label>Engine cc:</label>
+    <label>Engine (cc):</label>
     <input id="engineInput" type="text" ng-model="supercar.engine" />
 
-    <label>Weight:</label>
-    <input id="weightInput" type="text" ng-model="supercar.weight" />
+    <label>0-60 (mph):</label>
+    <input id="zeroToSixtyInput" type="text" ng-model="supercar.zero_to_sixty" />
 
-    <label>Image file:</label>
-    <input id="imageInput" type="text" ng-model="supercar.image" />
+    <label>Weight (kg):</label>
+    <input id="weightInput" type="text" ng-model="supercar.weight" />
 
     <button id="saveButton" class="save" ng:click="saveSupercar()">
         Save</button>
@@ -30,10 +30,13 @@
 </div>
 
 <div class="form-right-col">
-    <img width="324" height="200" src="img/{{ supercar.image }}" 
+    <img width="324" height="200" ng-src="img/{{supercar.image}}" 
         onerror="this.src='img/default.png'"/>
 
-    <label>Notes:</label>
-    <textarea id="descriptionTextarea" ng-model="supercar.description" />
+    <label>Image file:</label>
+    <input id="imageInput" type="text" ng-model="supercar.image" />
 
+    <label>Notes:</label>
+    <textarea id="descriptionTextarea" ng-model="supercar.description" >
+    </textarea>
 </div>
