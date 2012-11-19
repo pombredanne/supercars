@@ -13,6 +13,10 @@ test/fitnesse/FitNesseRoot/ErrorLogs/
 test/fitnesse/FitNesseRoot/RecentChanges/
 test/fitnesse/FitNesseRoot/SelRunner/
 test/fitnesse/FitNesseRoot/files/SelRunner/
+apache-jmeter-*/
+_counters/
+_jmeter/
+jmxmonitor/
 
 *.pyc
 *.class
@@ -23,6 +27,9 @@ test/fitnesse/FitNesseRoot/files/SelRunner/
 *.nja
 *.bak
 *.tar.gz
+*.tgz
 data.txt
 pylint.out
 chromedriver.log
+jmeter.log.*
+.~lock.*

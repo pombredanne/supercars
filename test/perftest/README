@@ -1,0 +1,9 @@
+
+
+
+
+Configure JMeter
+================
+
+In order to get the results report in CSV format you will need to adjust the jmeter.properties file in apache-jmeter-<version>/bin/ folder. This repository will contain a suitable jmeter.properties configuration file.
+
