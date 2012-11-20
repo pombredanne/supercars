@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # (c) Mark Fink, 2008 - 2012
-# This script is released under the Modified BSD License
+# This script is released under the MIT License
 # Warranty in any form is excluded
 
 # Start counters for linux environment

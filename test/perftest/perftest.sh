@@ -3,7 +3,7 @@
 SCRIPTPATH=$( cd $(dirname $0) ; pwd -P )
 
 PATH=$PATH:/opt/sun/jdk1.6.0_07/bin
-JMETER=$SCRIPTPATH/apache-jmeter-2.8/bin/jmeter.sh
+JMETER=~/devel/tutorial_ci/runtime/apache-jmeter-2.8/bin/jmeter.sh
 SUFFIX=`TZ=CET date '+%y%m%d%H'`
 DURATION=1800
 

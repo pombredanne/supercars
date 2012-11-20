@@ -1,18 +1,18 @@
 #!/usr/bin/env python
 
-from collections import OrderedDict
+#from collections import OrderedDict
 import sys
 import os
 import tarfile
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime
+#from datetime import timedelta
 import re
 
 from plot_sar import main as sar
 from plot_vmstat import main as vmstat
 from plot_top import main as top
 from plot_gc import main as gc
-from plot_physmon import main as physmon
 
 #import profile
 
@@ -38,10 +38,10 @@ def plot(testrun, start, end, environments, plottypes, testrundir, plotfolder):
         level=logging.INFO,
         format='%(asctime)s %(message)s'
     )
-    
+
     logger = logging.getLogger('logparser')
 
-    suffix = os.path.basename(sys.argv[2]).split('.', 1)[0].split('-', 2)[2]
+    #suffix = os.path.basename(sys.argv[2]).split('.', 1)[0].split('-', 2)[2]
 
     for environment in environments:
 
@@ -50,32 +50,32 @@ def plot(testrun, start, end, environments, plottypes, testrundir, plotfolder):
         config['host'] = environment
         config['output'] = plotfolder
         config['startTime'] = datetime.strptime(start, '%Y-%m-%d %H:%M:%S')
-        config['endTime'] =  datetime.strptime(end, '%Y-%m-%d %H:%M:%S')
-        
+        config['endTime'] = datetime.strptime(end, '%Y-%m-%d %H:%M:%S')
+
         if 'sar' in plottypes:
             with tarfile.open(os.path.join(testrundir, '%s-oscounters-%s.tgz' % (environment, testrun)), 'r') as tar:
                 logger.info('Processing sar in %s-oscounters-%s.tgz' % (environment, testrun))
-                fi = tar.extractfile('./sar.txt.%s' % testrun)
+                fi = tar.extractfile('sar.txt.%s' % testrun)
                 config['input'] = fi
                 try:
                     sar(config)
                 except:
                     logger.error(sys.exc_info())
-            
+
         if 'vmstat' in plottypes:
             with tarfile.open(os.path.join(testrundir, '%s-oscounters-%s.tgz' % (environment, testrun)), 'r') as tar:
                 logger.info('Processing vmstat in %s-oscounters-%s.tgz' % (environment, testrun))
-                fi = tar.extractfile('./vmstat.txt.%s' % testrun)
+                fi = tar.extractfile('vmstat.txt.%s' % testrun)
                 config['input'] = fi
                 try:
                     vmstat(config)
                 except:
                     logger.error(sys.exc_info())
-            
+
         if 'top' in plottypes:
             with tarfile.open(os.path.join(testrundir, '%s-oscounters-%s.tgz' % (environment, testrun)), 'r') as tar:
                 logger.info('Processing top in %s-oscounters-%s.tgz' % (environment, testrun))
-                fi = tar.extractfile('./top.txt.%s' % testrun)
+                fi = tar.extractfile('top.txt.%s' % testrun)
                 config['input'] = fi
                 try:
                     top(config)
@@ -84,8 +84,8 @@ def plot(testrun, start, end, environments, plottypes, testrundir, plotfolder):
 
         if 'gc' in plottypes:
             with tarfile.open(os.path.join(testrundir, '%s-gclogs-%s.tgz' % (environment, testrun)), 'r') as tar:
-               logger.info('Processing %s-gclogs-%s.tgz' % (environment, testrun))
-               for tarinfo in tar:
+                logger.info('Processing %s-gclogs-%s.tgz' % (environment, testrun))
+                for tarinfo in tar:
                     if tarinfo.isreg():
                         # check for suitable logfiles
                         filename = re.match(r'^\.\/(.*)\/jvm-gc.log$', tarinfo.name)
@@ -103,39 +103,9 @@ def plot(testrun, start, end, environments, plottypes, testrundir, plotfolder):
                             except:
                                 logger.error(sys.exc_info())
 
-        if 'traces' in plottypes:
-            with tarfile.open(os.path.join(testrundir, '%s-traces-%s.tgz' % (environment, testrun)), 'r:gz') as tar:
-                logger.info('Processing %s-traces-%s.tgz' % (environment, testrun))
-                files = []
-                for tarinfo in tar:
-                    if tarinfo.isreg():
-                        # check for suitable logfiles
-                        if re.match(r'^.*-trace\.log\.?\d*$', tarinfo.name):
-                            files.append(tar.extractfile(tarinfo.name))
-                config['input'] = files
-                # define steps, order is important for stacked area graph
-                config['steps'] = OrderedDict()
-                config['steps']['enqueued_to_phmsns']   = ('start', 'measurements')
-                config['steps']['dequeued_from_phmsns'] = ('end', 'measurements')
-                config['steps']['before_import']       = ('start', 'import')
-                config['steps']['after_import']        = ('end', 'import')
-                config['steps']['enqueued_to_amq']     = ('start', 'assigned measurement')
-                config['steps']['dequeued_from_amq']   = ('end', 'assigned measurement')
-                config['steps']['before_check']        = ('start', 'check')
-                config['steps']['after_check']         = ('end', 'check')
-                config['steps']['enqueued_to_phmalr']   = ('start', 'alarm')
-                config['steps']['dequeued_from_phmalr'] = ('end', 'alarm')
-                config['steps']['before_mail']         = ('start', 'mail')
-                config['steps']['after_mail']          = ('end', 'mail')        
-                try:
-                    #profile.run('physmon(config)')
-                    physmon(config)
-                except:
-                    logger.error(sys.exc_info())
-                            
     return True
 
-    
+
 def main(argv=None):
     if argv is None:
         argv = sys.argv
@@ -150,4 +120,3 @@ def main(argv=None):
 
 if __name__ == "__main__":
     sys.exit(main())
-

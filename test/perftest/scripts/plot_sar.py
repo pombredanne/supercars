@@ -18,7 +18,7 @@ Before executing the script you need to configure start and end time of your tes
 and the path of the sar logs. Feel free to use this script as a basis for your work.
 
 (c) Mark Fink, 2008 - 2012
-This script is released under the Modified BSD License
+This script is released under the MIT License
 Warranty in any form is excluded
 """
 

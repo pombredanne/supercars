@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-import datetime
+
+#import datetime
 import os
 import re
 import sys
@@ -13,13 +14,13 @@ def testrun_folder(targetdir, testrun):
     '''make sure testrun folder is available'''
     if not os.path.exists(os.path.join(targetdir, testrun)):
         os.makedirs(os.path.join(targetdir, testrun))
-        
+
 
 def zip_files(ssh, remotedir, pattern, archive):
     '''zip all the files on remote which follow a given pattern'''
-    stdin, stdout, sterr = ssh.exec_command('cd %s; find -L . -regex "%s" ' % (remotedir, pattern) + 
+    stdin, stdout, sterr = ssh.exec_command('cd %s; find -L . -regex "%s" ' % (remotedir, pattern) +
         '-type f -print | xargs tar cf - | gzip -c > %s' % archive)
-    
+
     channel = stdout.channel.recv_exit_status()  # exec_command is non-blocking, wait for exit status
 
     
@@ -54,15 +55,6 @@ def oscounters(ssh, environment, logdir, remotedir, testrun, targetdir):
     except StopIteration:
         pass
 
-        
-def traces(ssh, environment, logdir, remotedir, testrun, targetdir):
-    ''' zip the physmon traces on remote and store them with the other testrun files '''
-    zip_files(ssh, logdir, '.*\/.*-trace\.log\.?\d*', '%s/%s-traces-%s.tgz' % (remotedir, environment, testrun))
-    testrun_folder(targetdir, testrun)
-    collect_file(ssh, '%s/%s-traces-%s.tgz' % (remotedir, environment, testrun), os.path.join(targetdir, testrun))
-    # remove the files on remote
-    remove_files(ssh, remotedir, './%s-traces-%s.tgz' % (environment, testrun))       
-        
 
 def gclogs(ssh, environment, logdir, remotedir, testrun, targetdir):
     ''' zip the GC logfiles on remote and store them with the other testrun files '''
@@ -120,13 +112,12 @@ def collect(environments, logtypes, testrun, targetdir):
 
         # collect the different logtypes for this environment
         map(lambda logtype: globals()[logtype](ssh, environment, logdir, remotedir, testrun, targetdir), logtypes)
-        
+
         ssh.close()
-    
+
     return True
-    
-    
-        
+
+
 def main(argv=None):
     if argv is None:
         argv = sys.argv
@@ -141,4 +132,3 @@ def main(argv=None):
 
 if __name__ == "__main__":
     sys.exit(main())
-

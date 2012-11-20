@@ -1,4 +1,4 @@
 @echo off
 REM run the OS counters for <number of seconds> on remote systems
-REM python scripts/start_counters.py "Abaiang, Abemama, Tamana" 3600
-python scripts/start_counters.py "Abaiang, Abemama, Tamana" 40000
+REM python scripts/start_counters.py "Sakai, Uji" 3600
+python scripts/start_counters.py "Sakai, Uji" 40000
