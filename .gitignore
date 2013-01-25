@@ -18,6 +18,7 @@ _counters/
 _jmeter/
 jmxmonitor/
 
+*.pyo
 *.pyc
 *.class
 *.egg

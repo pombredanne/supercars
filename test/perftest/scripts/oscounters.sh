@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# (c) Mark Fink, 2008 - 2012
+# (c) Mark Fink, 2008 - 2013
 # This script is released under the MIT License
 # Warranty in any form is excluded
 

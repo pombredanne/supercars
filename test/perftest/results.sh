@@ -1,8 +1,12 @@
 #!/bin/bash
 
-TESTRUN="12111908"
-START_TIME="2012-11-19 08:40:00"
-END_TIME="2012-11-19 09:10:00"
+# (c) Mark Fink, 2008 - 2013
+# This script is released under the MIT License
+# Warranty in any form is excluded
+
+TESTRUN="13012511"
+START_TIME="2013-01-25 11:15:00"
+END_TIME="2013-01-25 11:20:00"
 PYTHON=~/devel/tutorial_ci/runtime/pyrun/bin/pyrun
 
 # remove old plot_error.log if any
@@ -32,13 +36,13 @@ touch testruns/$TESTRUN/collect.lock
 # create plots
 # oscounters
 $PYTHON scripts/plot.py "$TESTRUN" "$START_TIME" "$END_TIME" "Sakai" \
-    "sar, vmstat, top" "testruns/$TESTRUN" "testruns/$TESTRUN/_plots"
+    "sar, vmstat, top, jmx" "testruns/$TESTRUN" "testruns/$TESTRUN/_plots"
 
 # webservice results
-$PYTHON scripts/plot_jmeter.py Sakai "testruns/$TESTRUN/jmeter-logs-$TESTRUN.tgz" \
-    testruns/$TESTRUN/_plots \
-    webservice_scenario/20121114_Performancetest_Model_ajaxdemo_quick_v0.1.xls \
-    "$START_TIME" "$END_TIME"
+#$PYTHON scripts/plot_jmeter.py Sakai "testruns/$TESTRUN/jmeter-logs-$TESTRUN.tgz" \
+#    testruns/$TESTRUN/_plots \
+#    webservice_scenario/20121114_Performancetest_Model_ajaxdemo_quick_v0.1.xls \
+#    "$START_TIME" "$END_TIME"
 
 # archive all plots
 #python scripts/archive_plots.py "$TESTRUN"

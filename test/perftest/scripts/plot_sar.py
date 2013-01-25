@@ -4,9 +4,9 @@ For performance testing you need a clear picture about the utilization
 of the machine your application is running on
 
 This script helps you to analyse sar logs in order to extract information
-about machine utilization. The information contained in the vmstat logs is
+about machine utilization. The information contained in the sar logs is
 extracted and put into a in memory database for easy processing. This is of cause
-a limiting factor but usually sufficient for the kind of systems and test 
+a limiting factor but usually sufficient for the kind of systems and test
 durations I am facing. If you are testing really huge systems like a whole system
 stack you might need to configure a file based database or you might prefer
 a different approach.
@@ -17,7 +17,7 @@ logs from your system.
 Before executing the script you need to configure start and end time of your test
 and the path of the sar logs. Feel free to use this script as a basis for your work.
 
-(c) Mark Fink, 2008 - 2012
+(c) Mark Fink, 2008 - 2013
 This script is released under the MIT License
 Warranty in any form is excluded
 """
@@ -28,8 +28,6 @@ from datetime import datetime, timedelta
 import pytz
 from pylab import *
 
-import fileinput
-import glob
 import re
 import os
 import tarfile

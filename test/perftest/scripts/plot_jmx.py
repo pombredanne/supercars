@@ -1,21 +1,16 @@
 #!/usr/bin/env python
 """
 For performance testing you need a clear picture about the utilization
-of the machine your application is running on
+of the machine your application is running on.
 
-This script helps you to analyse vmstat logs in order to extract information
-about machine utilization. The information contained in the vmstat logs is
-extracted and put into a in memory database for easy processing. This is of cause
-a limiting factor but usually sufficient for the kind of systems and test
-durations I am facing. If you are testing really huge systems like a whole system
-stack you might need to configure a file based database or you might prefer
-a different approach.
+This script helps you to analyse jmx logs in order to extract information
+about machine utilization.
 
-Before you can start the analysing your log files you need to retrieve the vmstat
+Before you can start the analysing your log files you need to retrieve the jmx
 logs from your system.
 
 Before executing the script you need to configure start and end time of your test
-and the path of the vmstat logs. Feel free to use this script as a basis for your work.
+and the path of the top logs. Feel free to use this script as a basis for your work.
 
 (c) Mark Fink, 2008 - 2013
 This script is released under the MIT License
@@ -24,7 +19,7 @@ Warranty in any form is excluded
 
 import logging
 import sqlite3
-from datetime import datetime, timedelta
+from datetime import datetime
 import pytz
 from pylab import *
 
@@ -42,41 +37,7 @@ def extract_filenumber(filename):
         return int(n)
 
 
-def report_cpu(starttime, endtime, data, reportfile, reporttitle):
-    """Create the report file, this part is application specific."""
-    # Note: I use Pylab, Pylab is a procedural interface to the
-    # matplotlib object-oriented plotting library. Of cause if you
-    # prefere the original matplotlib style or any other plotting tool
-    # you can use it here
-    fig = figure()
-
-    title(reporttitle)
-
-    tz = pytz.timezone('Europe/Berlin').localize(datetime.datetime.now()).strftime('%z')
-    xlabel('reported time: %s to %s [UTC %s]' % (starttime, endtime, tz),
-        fontsize='small', x=1.0, ha='right')
-    ylabel('CPU utilization [%]')
-
-    ts, user, sys, idle, wait = zip(*data)  # unpack
-    # use HTML color names like:
-    # http://www.html-color-names.com/color-chart.php
-    plot(ts, user, 'Red', label='user')
-    plot(ts, sys, 'Lime', label='system')
-    plot(ts, idle, 'Gold', label='idle')
-    plot(ts, wait, 'Blue', label='wait IO')
-
-    axis([None, None, 0, None])
-    legend(loc=0)  # 0 for optimized legend placement
-    fig.autofmt_xdate()
-
-    savefig(reportfile)
-
-    # cleanup
-    clf()
-    cla()
-
-
-def report_io(starttime, endtime, data, reportfile, reporttitle):
+def report_threadpool(starttime, endtime, data, reportfile, reporttitle):
     """Create the report file, this part is application specific."""
     # Note: I use Pylab, Pylab is a procedural interface to the
     # matplotlib object-oriented plotting library. Of cause if you
@@ -91,11 +52,11 @@ def report_io(starttime, endtime, data, reportfile, reporttitle):
         fontsize='small', x=1.0, ha='right')
     ylabel('Blocks/s')
 
-    ts, bi, bo = zip(*data)  # unpack
+    ts, tc, tm = zip(*data)  # unpack
     # use HTML color names like:
     # http://www.html-color-names.com/color-chart.php
-    plot(ts, bi, 'Red', label='in')
-    plot(ts, bo, 'Lime', label='out')
+    plot(ts, tm, 'Blue', label='maxThreads')
+    plot(ts, tc, 'Lime', label='currentThreadCount')
 
     axis([None, None, 0, None])
     legend(loc=0)  # 0 for optimized legend placement
@@ -108,13 +69,12 @@ def report_io(starttime, endtime, data, reportfile, reporttitle):
     cla()
 
 
-def report_health(starttime, endtime, data, reportfile, reporttitle):
+def report_connectionpool(starttime, endtime, data, reportfile, reporttitle):
     """Create the report file, this part is application specific."""
     # Note: I use Pylab, Pylab is a procedural interface to the
     # matplotlib object-oriented plotting library. Of cause if you
     # prefere the original matplotlib style or any other plotting tool
     # you can use it here
-    ax1 = subplot(111)
     fig = figure()
 
     title(reporttitle)
@@ -122,23 +82,17 @@ def report_health(starttime, endtime, data, reportfile, reporttitle):
     tz = pytz.timezone('Europe/Berlin').localize(datetime.datetime.now()).strftime('%z')
     xlabel('reported time: %s to %s [UTC %s]' % (starttime, endtime, tz),
         fontsize='small', x=1.0, ha='right')
-    ylabel('Context switches/s')
+    ylabel('Blocks/s')
 
-    ts, r, cs = zip(*data)  # unpack
+    ts, cc, cm = zip(*data)  # unpack
     # use HTML color names like:
     # http://www.html-color-names.com/color-chart.php
-    plt1, = plot(ts, cs, 'Lime')
+    plot(ts, cm, 'Blue', label='maxPoolSize')
+    plot(ts, cc, 'Lime', label='numBusyConnections')
+
     axis([None, None, 0, None])
+    legend(loc=0)  # 0 for optimized legend placement
     fig.autofmt_xdate()
-
-    ax2 = twinx()  # use a second axis for waiting processes
-    plt2, = plot(ts, r, 'Red')
-    ylabel('waiting processes')
-    ax2.yaxis.tick_right()
-
-    # legend is a little more work since we use two y-axis
-    legend([plt1, plt2], ['context switches', 'waiting processes'],
-        loc=0)  # 0 for optimized legend placement
 
     savefig(reportfile)
 
@@ -147,13 +101,12 @@ def report_health(starttime, endtime, data, reportfile, reporttitle):
     cla()
 
 
-def report_mem(starttime, endtime, data, reportfile, reporttitle):
+def report_sessions(starttime, endtime, data, reportfile, reporttitle):
     """Create the report file, this part is application specific."""
     # Note: I use Pylab, Pylab is a procedural interface to the
     # matplotlib object-oriented plotting library. Of cause if you
     # prefere the original matplotlib style or any other plotting tool
     # you can use it here
-    ax1 = subplot(111)
     fig = figure()
 
     title(reporttitle)
@@ -161,29 +114,16 @@ def report_mem(starttime, endtime, data, reportfile, reporttitle):
     tz = pytz.timezone('Europe/Berlin').localize(datetime.datetime.now()).strftime('%z')
     xlabel('reported time: %s to %s [UTC %s]' % (starttime, endtime, tz),
         fontsize='small', x=1.0, ha='right')
-    ylabel('free memory [in MB]')
+    ylabel('Blocks/s')
 
-    #print 'data: %s' % data
-
-    ts, free, si, so = zip(*data)  # unpack
-    free = [float(x) / 1024 for x in free]
+    ts, sc = zip(*data)  # unpack
     # use HTML color names like:
     # http://www.html-color-names.com/color-chart.php
+    plot(ts, sc, 'Lime', label='activeSessions')
 
-    plt1, = plot(ts, free, 'Red')
-    axis([None, None, 0, 12000])
-    fig.autofmt_xdate()
-
-    ax2 = twinx()  # use a second axis for waiting processes
-    plt2, = plot(ts, si, 'Lime')
-    plt3, = plot(ts, so, 'Blue')
     axis([None, None, 0, None])
-    ylabel('pages/s')
-    ax2.yaxis.tick_right()
-
-    # legend is a little more work since we use two y-axis
-    legend([plt1, plt2, plt3], ['free mem', 'page-in', 'page-out'],
-        loc=0)  # 0 for optimized legend placement
+    legend(loc=0)  # 0 for optimized legend placement
+    fig.autofmt_xdate()
 
     savefig(reportfile)
 
@@ -195,7 +135,7 @@ def report_mem(starttime, endtime, data, reportfile, reporttitle):
 ######################################################################
 # It would be possible to store the non application specific parts of
 # the script like parse_lines and LogParser in a central file.
-# I currently prefere a version that has every thing on board.
+# I currently prefer a version that has every thing on board.
 
 def parse_lines(logParsers, fileinp):
     """parse lines from the fileinput and send them to the logparser"""
@@ -251,7 +191,7 @@ class LogParser(object):
                 c = self.db.cursor()
                 c.execute('insert into ' + self.tablename + '(' +
                     ', '.join(values.keys() + self.callbacks.keys()) +
-                    ') values (' + ', '.join(['?'] * (len(values) +
+                    ') values (' + ', '.join(['?']*(len(values) +
                     len(self.callbacks))) + ')',
                     [] + values.values() + cb_values)
                 c.close()
@@ -267,56 +207,34 @@ def main(config):
     analysis situation this is by nature application specific. In
     other words adjust everything in here so it fits your needs!
     """
-    #20111201 152900 interval 5 sec
-    #procs -----------memory---------- ---swap-- -----io---- -system-- ----cpu ----
-    # r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa
-    # 2  0      0 180152 472892 1843548    0    0     4    10   23   18  9  6 84  0
-    #procs -----------memory---------- ---swap-- -----io---- --system-- -----cpu------
-    # r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
-    # 2  0      0 11116488 835728 1764956    0    0     0     5    1    1  0  0 99  0  0
-    #procs -----------memory---------- ---swap-- -----io---- -system-- ----cpu----
-    # r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa
-    # 0  0      0 2172996 551736 688480    0    0   218    21 5945  104  7  4 84  6
-    def timestamp(logstart, interval):
-        # helper to create a generator for adding timestamps to
-        # parsed loglines
-        # workaround nonlocal to implement missing closure
-        nonlocal = {
-            'logstart': logstart,
-            'interval': int(interval)
-            }
+    # parse the data from the logfiles
+    #timestamp;currentThreadCount;maxThreads;numBusyConnections;maxPoolSize;activeSessions
+    #20130125 111236;2;200;7;10;747
+    #20130125 111241;2;200;8;10;749
+    #20130125 111246;2;200;8;10;751
+    #20130125 111251;2;200;8;10;753
+    #20130125 111256;2;200;7;10;755
+    #20130125 111301;2;200;6;10;757
 
-        def gen(**kw_args):
-            nonlocal['logstart'] += timedelta(
-                seconds=nonlocal['interval'])
-            return nonlocal['logstart']
-        return gen
+    def timestamp(**kw_args):
+        ts = datetime.datetime.strptime(kw_args['ts'], '%Y%m%d %H%M%S')
+        return ts
 
-    # central result database which is hold in memory
+    # central result database which is held in memory
     db = sqlite3.connect(':memory:',
         detect_types=sqlite3.PARSE_COLNAMES)
 
-    # read logstart and interval
-    match = re.compile('^(?P<logstart>\d{8} \d{6})' +
-        ' interval (?P<interval>\d+) sec').match(
-        config['input'].readline()).groupdict()
-
-    callbacks = {'timestamp': timestamp(
-        datetime.datetime.strptime(match['logstart'], '%Y%m%d %H%M%S'),
-        match['interval'])
-    }
+    callbacks = {'timestamp': timestamp}
 
     # parse the data from the logfiles
-    vmstat = LogParser('^\s+(?P<r>\d+)\s+(?P<b>\d+)\s+' +
-        '(?P<swpd>\d+)\s+(?P<free>\d+)\s+(?P<buff>\d+)\s+' +
-        '(?P<cache>\d+)\s+(?P<si>\d+)\s+(?P<so>\d+)\s+(?P<bi>\d+)' +
-        '\s+(?P<bo>\d+)\s+(?P<iin>\d+)\s+(?P<cs>\d+)\s+(?P<us>\d+)' +
-        '\s+(?P<sy>\d+)\s+(?P<id>\d+)\s+(?P<wa>\d+)\s*(?P<st>\d+)?',
+    jmx = LogParser('^(?P<ts>\d{8} \d{6});(?P<currentThreadCount>\d+?);' +
+        '(?P<maxThreads>\d+?);(?P<numBusyConnections>\d+?);' +
+        '(?P<maxPoolSize>\d+?);(?P<activeSessions>\d+?)',
         db, callbacks)
 
-    discard = LogParser('^ r  b   swpd|^procs ---')
+    discard = LogParser('^timestamp;currentThreadCount;maxThreads;numBusyConnections;maxPoolSize;activeSessions')
 
-    parse_lines([vmstat, discard], config['input'])
+    parse_lines([jmx, discard], config['input'])
 
     # clean up the data
     c = db.cursor()
@@ -329,42 +247,34 @@ def main(config):
     # clean up doublets or other problems with the logfile
     c.close()
 
-    # extract the data for the report(s)
-    # CPU
+    # thread pool
     c = db.cursor()
-
     c.execute('select timestamp as "timestamp [timestamp]", ' +
-        'us, sy, id, wa from logentries order by timestamp')
-    report_cpu(config['startTime'], config['endTime'], c.fetchall(),
+        'currentThreadCount, maxThreads from logentries order by timestamp')
+    report_threadpool(config['startTime'], config['endTime'], c.fetchall(),
         os.path.join(config['output'],
-            config['host'] + '_cpu.png'),
-        config['host'] + ': CPU utilization')
-    #c.close()
+            config['host'] + '_thread_pool.png'),
+        config['host'] + ': Thread Pool')
+    c.close()
 
-    #c = db.cursor()
-    # IO
+    # connection pool
+    c = db.cursor()
     c.execute('select timestamp as "timestamp [timestamp]", ' +
-        'bi, bo from logentries order by timestamp')
-    report_io(config['startTime'], config['endTime'], c.fetchall(),
+        'numBusyConnections, maxPoolSize from logentries order by timestamp')
+    report_connectionpool(config['startTime'], config['endTime'], c.fetchall(),
         os.path.join(config['output'],
-            config['host'] + '_io.png'),
-        config['host'] + ': IO')
+            config['host'] + '_connection_pool.png'),
+        config['host'] + ': C3PO Connection Pool')
+    c.close()
 
-    # MEM
+    # active sessions
+    c = db.cursor()
     c.execute('select timestamp as "timestamp [timestamp]", ' +
-        'free, si, so from logentries order by timestamp')
-    report_mem(config['startTime'], config['endTime'], c.fetchall(),
+        'activeSessions from logentries order by timestamp')
+    report_sessions(config['startTime'], config['endTime'], c.fetchall(),
         os.path.join(config['output'],
-            config['host'] + '_mem.png'),
-        config['host'] + ': Memory utilization')
-
-    # Health
-    c.execute('select timestamp as "timestamp [timestamp]", ' +
-        'r, cs from logentries order by timestamp')
-    report_health(config['startTime'], config['endTime'], c.fetchall(),
-        os.path.join(config['output'],
-            config['host'] + '_health.png'),
-        config['host'] + ': System health')
+            config['host'] + '_active_sessions.png'),
+        config['host'] + ': Active Sessions')
     c.close()
 
 
@@ -372,7 +282,7 @@ def usage():
     """
     Prints the script's usage guide.
     """
-    print "Usage: vmstat.py input output"
+    print "Usage: plot_jmx.py input output"
     print "host = hostname"
     print "input = path to simulation.log file"
     print "output = path to simulation.png file"
@@ -389,13 +299,9 @@ if __name__ == "__main__":
         level=logging.WARNING,
         format='%(asctime)s %(message)s'
     )
-    #files = glob.glob(sys.argv[2])
-    #fs1.sort(key=extract_filenumber, reverse=True)
-    #fi = fileinput.input(files) # iterate over the lines of all files
     suffix = os.path.basename(sys.argv[2]).split('.', 1)[0].split('-', 2)[2]
     with tarfile.open(sys.argv[2], 'r') as tar:
-        fi = tar.extractfile('./vmstat.txt.%s' % suffix)
-
+        fi = tar.extractfile('./jmx.txt.%s' % suffix)
         config = {
             'host': sys.argv[1],
             'input': fi,
