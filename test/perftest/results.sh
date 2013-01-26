@@ -4,9 +4,10 @@
 # This script is released under the MIT License
 # Warranty in any form is excluded
 
-TESTRUN="13012511"
-START_TIME="2013-01-25 11:15:00"
-END_TIME="2013-01-25 11:20:00"
+TESTRUN="13012619"
+START_TIME="2013-01-26 19:17:00"
+END_TIME="2013-01-26 19:47:00"
+
 PYTHON=~/devel/tutorial_ci/runtime/pyrun/bin/pyrun
 
 # remove old plot_error.log if any
@@ -29,20 +30,20 @@ mkdir testruns/$TESTRUN/_plots
 #REM     echo Operation aborted! Logfiles have already been collected for testrun %testrun%.
 #REM     GOTO:EOF
 #REM )
-#REM python scripts/collect_logs.py "%testrun%" "Sakai, Uji" "oscounters, gclogs, applogs"
-#REM python scripts/collect_logs.py "%testrun%" "Sakai, Uji" "traces"
+$PYTHON scripts/collect_logs.py "%testrun%" "Laptop" "oscounters"
 touch testruns/$TESTRUN/collect.lock
 
 # create plots
 # oscounters
-$PYTHON scripts/plot.py "$TESTRUN" "$START_TIME" "$END_TIME" "Sakai" \
-    "sar, vmstat, top, jmx" "testruns/$TESTRUN" "testruns/$TESTRUN/_plots"
+$PYTHON scripts/plot.py "$TESTRUN" "$START_TIME" "$END_TIME" "Laptop" \
+    "sar, vmstat, top" "testruns/$TESTRUN" "testruns/$TESTRUN/_plots"
 
 # webservice results
-#$PYTHON scripts/plot_jmeter.py Sakai "testruns/$TESTRUN/jmeter-logs-$TESTRUN.tgz" \
-#    testruns/$TESTRUN/_plots \
-#    scenarios/loadmodel_supercars_quick_v0.1.xls \
-#    "$START_TIME" "$END_TIME"
+$PYTHON scripts/plot_jmeter.py "Laptop" \
+    "testruns/$TESTRUN/jmeter-logs-$TESTRUN.tar.gz" \
+    testruns/$TESTRUN/_plots \
+    scenarios/loadmodel_supercars_quick_v0.1.xls \
+    "$START_TIME" "$END_TIME"
 
 # archive all plots
 #python scripts/archive_plots.py "$TESTRUN"
@@ -56,7 +57,6 @@ $PYTHON scripts/plot.py "$TESTRUN" "$START_TIME" "$END_TIME" "Sakai" \
 #    echo ### Please refer to plot_error.log for details!
 #    echo #############################################################
 #)
-
 
 
 #if [ $# -ne 4 ]

@@ -19,7 +19,7 @@
           </elementProp>
           <elementProp name="no_cars" elementType="Argument">
             <stringProp name="Argument.name">no_cars</stringProp>
-            <stringProp name="Argument.value">31</stringProp>
+            <stringProp name="Argument.value">30</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
         </collectionProp>
@@ -86,7 +86,7 @@ eval(&apos;var response = &apos; + prev.getResponseDataAsString());
 
 // Assert 
 if (Number(response.length) &lt;= Number(vars.get(&quot;no_cars&quot;))) {
-    AssertionResult.setFailureMessage(&quot;result was expected to contain at least&quot; + vars.get(&quot;no_cars&quot;) + &quot; cars&quot;);
+    AssertionResult.setFailureMessage(&quot;result was expected to contain at least &quot; + vars.get(&quot;no_cars&quot;) + &quot; cars&quot;);
     AssertionResult.setFailure(true);
 } else {
     AssertionResult.setFailure(false);
