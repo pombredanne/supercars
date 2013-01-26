@@ -42,19 +42,10 @@ REM     "testruns/%testrun%" "testruns/%testrun%/_plots"
 REM python scripts/plot.py "%testrun%" "%startTime%" "%endTime%" "Seeland" "vmstat" "testruns/%testrun%" "testruns/%testrun%/_plots"
 python scripts/plot.py "%testrun%" "%startTime%" "%endTime%" "Seeland" "jmx" "testruns/%testrun%" "testruns/%testrun%/_plots"
 
-REM physmon combined 90th percentile
-REM python scripts/plot_physmon_p90.py "%testrun%" "%startTime%" "%endTime%" "Abaiang, Abemama" "testruns/%testrun%" "testruns/%testrun%/_plots"
-
-
 REM webservice results
 REM python scripts/plot_jmeter.py Abaiang-Abemama "testruns/%testrun%/jmeter-logs-%testrun%.tgz" testruns/%testrun%/_plots ^
-REM    C:\workspace\physmon-perftest\webservice_scenario\20120417_Performancetest_Model_physmon_average_v0.1.xls ^
+REM    scenarios\loadmodel_supercars_quick_v0.1.xls ^
     "%startTime%" "%endTime%"
-
-
-REM debug single plot script
-REM python scripts/plot_physmon.py "Abaiang" "testruns/%testrun%/Abaiang-traces-%testrun%.tgz" "testruns/%testrun%/_plots" "%startTime%" "%endTime%" 
-REM python scripts/plot_physmon.py "Abemama" "testruns/%testrun%/Abemama-traces-%testrun%.tgz" "testruns/%testrun%/_plots" "%startTime%" "%endTime%" 
 
 
 REM archive all plots

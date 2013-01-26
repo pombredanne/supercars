@@ -41,7 +41,7 @@ $PYTHON scripts/plot.py "$TESTRUN" "$START_TIME" "$END_TIME" "Sakai" \
 # webservice results
 #$PYTHON scripts/plot_jmeter.py Sakai "testruns/$TESTRUN/jmeter-logs-$TESTRUN.tgz" \
 #    testruns/$TESTRUN/_plots \
-#    webservice_scenario/20121114_Performancetest_Model_ajaxdemo_quick_v0.1.xls \
+#    scenarios/loadmodel_supercars_quick_v0.1.xls \
 #    "$START_TIME" "$END_TIME"
 
 # archive all plots
