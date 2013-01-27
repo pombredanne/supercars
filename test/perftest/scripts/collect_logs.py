@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 """
 (c) Mark Fink, 2008 - 2013
 This script is released under the MIT License
@@ -24,16 +25,16 @@ def zip_files(ssh, remotedir, pattern, archive):
     '''zip all the files on remote which follow a given pattern'''
     stdin, stdout, sterr = ssh.exec_command('cd %s; find -L . -regex "%s" ' % (remotedir, pattern) + 
         '-type f -print | xargs tar cf - | gzip -c > %s' % archive)
-    
+
     channel = stdout.channel.recv_exit_status()  # exec_command is non-blocking, wait for exit status
 
-    
+
 def collect_file(ssh, archive, targetdir):
     '''get a file from remote'''
     scp = SCPClient(ssh.get_transport())
     scp.get(archive, targetdir)
-    
-    
+
+
 def remove_files(ssh, remotedir, pattern):
     '''remove all files on remote'''
     stdin, stdout, sterr = ssh.exec_command('cd %s; find -L . -regex "%s" ' % (remotedir, pattern) + 
@@ -65,7 +66,7 @@ def appcounters(ssh, environment, logdir, remotedir, testrun, targetdir):
     ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command('cd %s; ls *.pid' % os.path.join(remotedir, '_app'))
     try:
         while ssh_stdout:
-            pid = re.match('^(\d{8})\.pid$', ssh_stdout.next()).group(1) # for all pids
+            pid = re.match('^(\d{8})\.pid$', ssh_stdout.next()).group(1)  # for all pids
             zip_files(ssh, '%s/_app/' % remotedir, '^.*\.txt\.%s$' % pid, '%s/%s-appcounters-%s.tgz' % (remotedir, environment, pid))
             testrun_folder(targetdir, pid)
             collect_file(ssh, '%s/%s-appcounters-%s.tgz' % (remotedir, environment, pid), os.path.join(targetdir, pid))
@@ -84,11 +85,11 @@ def traces(ssh, environment, logdir, remotedir, testrun, targetdir):
     collect_file(ssh, '%s/%s-traces-%s.tgz' % (remotedir, environment, testrun), os.path.join(targetdir, testrun))
     # remove the files on remote
     remove_files(ssh, remotedir, './%s-traces-%s.tgz' % (environment, testrun))       
-        
+
 
 def gclogs(ssh, environment, logdir, remotedir, testrun, targetdir):
     ''' zip the GC logfiles on remote and store them with the other testrun files '''
-    zip_files(ssh, logdir, '.*\/jvm-gc.log', '%s/%s-gclogs-%s.tgz' % (remotedir, environment, testrun))
+    zip_files(ssh, '%s/_app/' % remotedir, '.*\/jvm-gc.log', '%s/%s-gclogs-%s.tgz' % (remotedir, environment, testrun))
     testrun_folder(targetdir, testrun)
     collect_file(ssh, '%s/%s-gclogs-%s.tgz' % (remotedir, environment, testrun), os.path.join(targetdir, testrun))
     # remove the files on remote
@@ -120,10 +121,10 @@ def usage():
     print "environments = Name of the environment defined in the environments.ini file"
     print "logtypes = List types of logfiles to collect"
 
-    
+
 def collect(environments, logtypes, testrun, targetdir):
     """Collect specified logtypes from environments"""
-    
+
     for environment in environments:
         # load environment settings from INI file
         config = ConfigParser.ConfigParser()
@@ -133,7 +134,7 @@ def collect(environments, logtypes, testrun, targetdir):
         pwd = config.get(environment, 'pwd', 0)
         remotedir = config.get(environment, 'zipfolder', 0)
         logdir = config.get(environment, 'logdir', 0)
-        
+
         # prepare ssh connection
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(
@@ -142,13 +143,12 @@ def collect(environments, logtypes, testrun, targetdir):
 
         # collect the different logtypes for this environment
         map(lambda logtype: globals()[logtype](ssh, environment, logdir, remotedir, testrun, targetdir), logtypes)
-        
+
         ssh.close()
-    
+
     return True
-    
-    
-        
+
+
 def main(argv=None):
     if argv is None:
         argv = sys.argv
@@ -163,4 +163,3 @@ def main(argv=None):
 
 if __name__ == "__main__":
     sys.exit(main())
-

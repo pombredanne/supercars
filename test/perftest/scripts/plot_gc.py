@@ -4,8 +4,7 @@
 The original version by Sujit Pal from:
 http://sujitpal.blogspot.com/2006/08/charting-jvm-garbage-collection.html
 
-Made the gcview script work with Python 2.5+ including some other minor corrections
-by Mark Fink End of 2009, rework in 2010. 
+Made the gcview script work with Python 2.5+ including some other minor corrections by Mark Fink End of 2009, rework in 2010.
 Added tgz file processing, and PrintGCDateStamps support in 2012
 """
 
@@ -21,11 +20,12 @@ from pylab import *
 def parse(line):
     """
     Parses an input line from the logfile into a set of tokens and returns them.
+    -XX:+PrintHeapAtGC
 
-    I decided to use -XX:+PrintHeapAtGC for logging Gc informationafter
+    I decided to use -XX:+PrintHeapAtGC for logging Gc information after
     experiencing some problems with -XX:+PrintGCDetails
 
-    sample log entry from OpenJDK Runtime Environment 
+    sample log entry from OpenJDK Runtime Environment
     (IcedTea6 1.10.2) (6b22-1.10.2-0ubuntu1~11.04.1):
 {Heap before GC invocations=1 (full 0):
  PSYoungGen      total 18432K, used 15808K [0x9ef20000, 0xa03b0000, 0xb3920000)
@@ -133,7 +133,7 @@ Heap after GC invocations=2 (full 1):
     else:
         return
 
-        
+
 def drawGraph(elapsedTime, timeStampsFullGc, fullGcIndicators, 
         timeStampsUsed, edenSize, edenUsed, fromSize, fromUsed, toSize, toUsed,
         tenuredSize, tenuredUsed, permSize, permUsed,
@@ -223,7 +223,7 @@ def drawGraph(elapsedTime, timeStampsFullGc, fullGcIndicators,
     clf()
     cla()
 
-    
+
 def convertISOToUnixTS(isots):
     """
     Takes a timestamp (supplied from the command line) in ISO format, ie
@@ -234,7 +234,7 @@ def convertISOToUnixTS(isots):
     return time.mktime([int(mo.group(1)), int(mo.group(2)), int(mo.group(3)),
         int(mo.group(4)), int(mo.group(5)), int(mo.group(6)), 0, 0, -1])
 
-        
+
 def determin_baseTS(dateGc, tsoffset):
     """
     Takes a timestamp in GC log format, ie
@@ -247,7 +247,7 @@ def determin_baseTS(dateGc, tsoffset):
         float(mo.group(7))/float(1000) - float(mo.group(8)) - float(tsoffset) - 
         time.altzone)
 
-        
+
 def baseTimeStamp(logFile):
     """
     Since the timestamps in the gc.log file are probably in seconds since
@@ -256,7 +256,7 @@ def baseTimeStamp(logFile):
     """
     return os.lstat(logFile)[ST_CTIME]
 
-    
+
 def minutesElapsed(currentTS, baseTS):
     """
     Convert the timestamp (in seconds since JVM startup) to mins elapsed
@@ -264,14 +264,14 @@ def minutesElapsed(currentTS, baseTS):
     """
     return (currentTS - baseTS) / 60
 
-    
+
 def timeString(ts):
     """
     Return printable version of time represented by seconds since epoch
     """
     return time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(ts))
 
-    
+
 def main(config):
     """
     Read the input file line by line, calling out to parse() for each
@@ -340,7 +340,7 @@ def main(config):
             tsoffset = float(result['fullgctsoffset'])
             if not config['baseTS']:
                 config['baseTS'] = determin_baseTS(result['dateFullGc'], result['fullgctsoffset'])
-        
+
         # Set the first timestamp once for the very first record, and keep
         # updating the last timestamp until we run out of lines to read
         if (gcStartTS == -1):
@@ -483,7 +483,7 @@ if __name__ == "__main__":
                 if filename:
                     fi = tar.extractfile(tarinfo.name)
                     outputfile = filename.group(1) + '-gc.png'
-    
+
                 config = {
                     #"input":  sys.argv[1],
                     "input":  fi,
@@ -512,4 +512,3 @@ if __name__ == "__main__":
                     config["endTime"]   = 0
 
                 main(config)
- 
