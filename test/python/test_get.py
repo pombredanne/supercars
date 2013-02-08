@@ -35,7 +35,6 @@ class TestGetMethod(HttpServerTestBase):
         response = self.request(
             "http://localhost/rest/supercars/00001",
             method="GET")
-        #expected = {"_id":"00001","name":"AC Cobra","country":"United States","top_speed":"160","0-60":"4.2","power":"485","engine":"6997","weight":"1148","description":"The AC Cobra, sold as the Ford/Shelby AC Cobra in the USA and often known colloquially as the Shelby Cobra in that country, is an American-engined British sports car produced intermittently since 1962.","image":"005.png"}
         expected = {u'engine': u'6997', u'top_speed': u'160', u'name': u'AC Cobra', u'power': u'485', u'country': u'United States', u'image': u'005.png', u'weight': u'1148', u'zero_to_sixty': u'4.2', '_id': '00001', u'description': u'The AC Cobra, sold as the Ford/Shelby AC Cobra in the USA and often known colloquially as the Shelby Cobra in that country, is an American-engined British sports car produced intermittently since 1962.'}
         try:
             assert_equal(json.loads(response.read()), expected)
