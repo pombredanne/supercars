@@ -3,7 +3,7 @@ REM execute performance test
 
 set DURATION=1800
 
-set JMETER="apache-jmeter-2.6\bin\jmeter.bat"
+set JMETER="apache-jmeter-2.9\bin\jmeter.bat"
 SET SUFFIX=%date:~8,2%%date:~3,2%%date:~0,2%%time:~0,2%
 SET SUFFIX=%SUFFIX: =0%
 
