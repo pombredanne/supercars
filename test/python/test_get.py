@@ -31,7 +31,6 @@ class TestGetMethod(HttpServerTestBase):
 
         self.maxDiff = None
 
-
     def test_get_one_record(self):
         response = self.request(
             "http://localhost/rest/supercars/00001",
