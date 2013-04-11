@@ -1,7 +1,7 @@
 |import                       |
 |org.testingsoftware.selrunner|
 
-!|script             |
-|start|firefox runner|
+!|script                  |
+|start|${SELENIUM_BROWSER}|
 
 !note You need to start the application (restserver.sh start) before you can run the test!
