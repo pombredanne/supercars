@@ -4,7 +4,8 @@
 # This script is released under the MIT License
 # Warranty in any form is excluded
 
-PYTHON=~/devel/tutorial_ci/runtime/pyrun/bin/pyrun
+SCRIPTPATH=$( cd $(dirname $0) ; pwd -P )
+PYTHON=$SCRIPTPATH/../../../tutorial_ci/runtime/pyrun/bin/pyrun
 
 echo "run the OS counters for <number of seconds> on remote systems"
 $PYTHON scripts/start_counters.py "Laptop" "oscounters.sh" "300"
