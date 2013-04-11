@@ -4,11 +4,12 @@
 # This script is released under the MIT License
 # Warranty in any form is excluded
 
-TESTRUN="13012619"
-START_TIME="2013-01-26 19:17:00"
-END_TIME="2013-01-26 19:47:00"
+TESTRUN="13041118"
+START_TIME="2013-04-11 18:30:00"
+END_TIME="2013-04-11 19:00:00"
 
-PYTHON=~/devel/tutorial_ci/runtime/pyrun/bin/pyrun
+SCRIPTPATH=$( cd $(dirname $0) ; pwd -P )
+PYTHON=$SCRIPTPATH/../../../tutorial_ci/runtime/pyrun/bin/pyrun
 
 # remove old plot_error.log if any
 #IF EXIST testruns\%testrun%\plot_error.log (
