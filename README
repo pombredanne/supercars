@@ -13,10 +13,10 @@ Another important thing I had to add is testing.
 Acknowledgements
 ================
 
-I started with the Wine Cellar application taken from here.
+I started the Supercars application based on a skeleton taken from here:
 http://coenraets.org/blog/2012/02/sample-application-with-angular-js/
 
-Many thanks to cristatus from the Angularjs IRC channel. He helped me out debugging the wine cellar sample app.
+Many thanks to cristatus from the Angularjs IRC channel. He helped me out debugging the supercars sample app.
 
 
 Debugging in Developer Tools
@@ -64,8 +64,8 @@ Run ajaxdemo
 python ./scripts/restserver.py
 
 
-Visit the Wine Cellar demo app
-------------------------------
+Visit the Supercars app
+-----------------------
 
 Just point your browser to:
 http://localhost:8000/index.html

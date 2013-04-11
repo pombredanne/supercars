@@ -68,8 +68,6 @@ class RestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
     def do_POST(self):
         """Respond to a POST request."""
-        # Example (using cURL):
-        # curl -X POST -d '{"name":"BODEGA LURTON","year":"2011","grapes":"Pinot Gris","country":"Argentina","region":"Mendoza","description":"Solid notes of black currant blended with a light citrus make this wine an easy pour for varied palates."}' 'http://localhost:8000/rest/cellar/wines/'
 
         url = urlparse.urlparse(self.path)
         path_elements = url.path.strip('/').split('/')
@@ -95,8 +93,6 @@ class RestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
     def do_PUT(self):
         """Respond to a PUT request."""
-        # Example (using cURL):
-        # curl -X PUT -d '{"name":"CHATEAU DE SAINT COSME","year":"2009","grapes":"Grenache / Syrah","country":"France","region":"Southern Rhone / Gigondas","description":"The aromas of fruit and spice give one a hint of the light drinkability of this lovely wine, which makes an excellent complement to fish dishes."}' 'http://localhost:8000/rest/cellar/wines/4fb8ad99b0ab584586000000'
 
         url = urlparse.urlparse(self.path)
         path_elements = url.path.strip('/').split('/')
@@ -120,8 +116,6 @@ class RestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
     def do_DELETE(self):
         """Respond to a DELETE request."""
-        # Example (using cURL):
-        # curl -X DELETE 'http://localhost:8000/rest/cellar/wines/4fb8a590b0ab582e8e000001'
 
         url = urlparse.urlparse(self.path)
         path_elements = url.path.strip('/').split('/')

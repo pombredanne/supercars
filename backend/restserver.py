@@ -21,7 +21,6 @@ SERVER_HOST = 'localhost'
 SERVER_PORT = 8000
 SERVER_APIPREFIX = 'rest'
 SUPERCARS_FILE = here('supercars.json')
-#SUPERCARS_FILE = here('winecellar.json')
 
 
 class RestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):

@@ -16,7 +16,7 @@ create new supercar
 | textfield | id:imageInput | type | 050.jpg |
 | execute | id:saveButton |
 
-verify that the new wine is contained in the list
+verify that the new supercar is contained in the list
 
 !| script |
 | find element | id:sidebar |
