@@ -19,7 +19,7 @@ $JMETER -n -tscenarios/testplan.jmx -l_jmeter/results.txt.$SUFFIX \
     -j_jmeter/jmeter.log.$SUFFIX -Jduration=$DURATION -pjmeter.properties
 
 # create folder for testresults
-mkdir testruns/$SUFFIX
+mkdir -p testruns/$SUFFIX
 
 # archive test results
 cd _jmeter/

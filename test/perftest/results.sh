@@ -21,7 +21,7 @@ rm testruns/$TESTRUN/plot_error.log
 #IF NOT EXIST testruns\%testrun%\_plots (
 #    mkdir testruns\%testrun%\_plots
 #)
-mkdir testruns/$TESTRUN/_plots
+mkdir -p testruns/$TESTRUN/_plots
 
 # collect logfiles
 #REM IF EXIST testruns\%testrun%\collect.lock (
