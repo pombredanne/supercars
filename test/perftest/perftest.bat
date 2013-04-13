@@ -3,7 +3,7 @@ REM execute performance test
 
 set DURATION=1800
 
-set JMETER="apache-jmeter-2.9\bin\jmeter.bat"
+set JMETER="%cd%\..\..\..\tutorial_ci\runtime\apache-jmeter-2.9\bin\jmeter.bat"
 SET SUFFIX=%date:~8,2%%date:~3,2%%date:~0,2%%time:~0,2%
 SET SUFFIX=%SUFFIX: =0%
 
@@ -12,6 +12,8 @@ start /wait cmd /C %JMETER% -n -tscenarios/testplan.jmx -lscenarios/results.txt.
 
 REM create folder for testresults
 mkdir "testruns/%SUFFIX%"
+
+REM TODO: need to replace tar and gzip with something that is available in Python
 
 REM collect test results
 cd scenarios/

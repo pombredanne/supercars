@@ -28,22 +28,22 @@ REM IF EXIST testruns\%testrun%\collect.lock (
 REM     echo Operation aborted! Logfiles have already been collected for testrun %testrun%.
 REM     GOTO:EOF
 REM )
-REM python scripts/collect_logs.py "%testrun%" "Abaiang, Abemama, Tamana" "oscounters, gclogs, applogs"
-REM python scripts/collect_logs.py "%testrun%" "Abaiang, Abemama" "traces"
-python scripts/collect_logs.py "%testrun%" "Sakai" "oscounters, appcounters"
+REM python scripts/collect_logs.py "%testrun%" "VM-UBUNTU" "oscounters, gclogs, applogs"
+REM python scripts/collect_logs.py "%testrun%" "VM-UBUNTU" "traces"
+python scripts/collect_logs.py "%testrun%" "VM-UBUNTU" "oscounters, appcounters"
 REM re  echo. 2>testruns\%testrun%\collect.lock
 
 REM create plots
-REM python scripts/plot.py "%testrun%" "%startTime%" "%endTime%" "Abaiang, Abemama, Tamana" "gc" ^
+REM python scripts/plot.py "%testrun%" "%startTime%" "%endTime%" "VM-UBUNTU" "gc" ^
 REM     "testruns/%testrun%" "testruns/%testrun%/_plots"
 
-REM python scripts/plot.py %testrun% "%startTime%" "%endTime%" "Abaiang, Abemama" "traces" ^
+REM python scripts/plot.py %testrun% "%startTime%" "%endTime%" "VM-UBUNTU" "traces" ^
 REM     "testruns/%testrun%" "testruns/%testrun%/_plots"
-REM python scripts/plot.py "%testrun%" "%startTime%" "%endTime%" "Seeland" "vmstat" "testruns/%testrun%" "testruns/%testrun%/_plots"
-python scripts/plot.py "%testrun%" "%startTime%" "%endTime%" "Seeland" "jmx" "testruns/%testrun%" "testruns/%testrun%/_plots"
+REM python scripts/plot.py "%testrun%" "%startTime%" "%endTime%" "VM-UBUNTU" "vmstat" "testruns/%testrun%" "testruns/%testrun%/_plots"
+python scripts/plot.py "%testrun%" "%startTime%" "%endTime%" "VM-UBUNTU" "jmx" "testruns/%testrun%" "testruns/%testrun%/_plots"
 
 REM webservice results
-REM python scripts/plot_jmeter.py Abaiang-Abemama "testruns/%testrun%/jmeter-logs-%testrun%.tgz" testruns/%testrun%/_plots ^
+REM python scripts/plot_jmeter.py VM-UBUNTU "testruns/%testrun%/jmeter-logs-%testrun%.tgz" testruns/%testrun%/_plots ^
 REM    scenarios\loadmodel_supercars_quick_v0.1.xls ^
     "%startTime%" "%endTime%"
 
