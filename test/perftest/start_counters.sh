@@ -8,9 +8,9 @@ SCRIPTPATH=$( cd $(dirname $0) ; pwd -P )
 PYTHON=$SCRIPTPATH/../../../tutorial_ci/runtime/pyrun/bin/pyrun
 
 echo "run the OS counters for <number of seconds> on remote systems"
-$PYTHON scripts/start_counters.py "Laptop" "oscounters.sh" "2000"
+$PYTHON scripts/start_counters.py "VM-UBUNTU" "oscounters.sh" "2000"
 
 #echo "run the JMX counters for <number of seconds> on remote systems"
-#python scripts/start_counters.py "Sakai" "appcounters.sh" "2000" \
+#python scripts/start_counters.py "Laptop" "appcounters.sh" "2000" \
 #    "host" "httpport" "jmxcredentials"
 
