@@ -10,9 +10,8 @@ REM # VIEW:
 REM #   http://localhost:8000
 
 set BASE_DIR=%cd%
+set PYTHON_HOME=%BASE_DIR%\..\tutorial_ci\runtime\python
 set PYTHON=%PYTHON_HOME%\python
-REM set PYTHON=%BASE_DIR%\..\tutorial_ci\runtime\python\python
-
 
 if "%1" == "start" (
     start %PYTHON% %BASE_DIR%\backend\restserver.py %BASE_DIR%\app > NUL

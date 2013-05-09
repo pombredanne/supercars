@@ -17,7 +17,7 @@ from collections import OrderedDict
 here = lambda x: os.path.abspath(os.path.join(os.path.dirname(__file__), x))
 
 __version__ = "0.1"
-SERVER_HOST = 'localhost'
+SERVER_HOST = '0.0.0.0'
 SERVER_PORT = 8000
 SERVER_APIPREFIX = 'rest'
 SUPERCARS_FILE = here('supercars.json')

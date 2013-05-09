@@ -8,11 +8,15 @@
 #   ./scripts/fitnesse_srv.sh start|stop|restart
 #
 
-RUNTIME="../tutorial_ci/runtime/fitnesse"
+BASEDIR=$( cd $(dirname $0) ; cd .. ; pwd -P )
 
-FITNESSE_ROOT="$PWD/test/fitnesse"
-FITNESSE_CMD="java -Xmx200M -DSELENIUM_BROWSER=ChromeRunner -DSELENIUM_SERVER=http://localhost:4444/wd/hub -cp $RUNTIME/lib/fitnesse.jar:$RUNTIME/lib/* fitnesseMain.FitNesseMain -d $FITNESSE_ROOT -p 10200 -e 0 -r FitNesseRoot -l $RUNTIME/logs/"
+RUNTIME=$BASEDIR/../tutorial_ci/runtime
+FITNESSE_ROOT=$BASEDIR/test/fitnesse
+
+FITNESSE_CMD="java -Xmx200M -DSELENIUM_BROWSER=ChromeRunner -DSELENIUM_SERVER=http://localhost:4444/wd/hub -cp $RUNTIME/fitnesse/lib/fitnesse-standalone.jar:$RUNTIME/fitnesse/lib/* fitnesseMain.FitNesseMain -d $FITNESSE_ROOT -p 10200 -e 0 -r FitNesseRoot -l $RUNTIME/fitnesse/logs/"
 export PATH=$PATH:$RUNTIME/drivers/
+export PATH=$RUNTIME/firefox/:$RUNTIME/fitnesse/drivers/:$PATH
+
 
 case $1 in
     "start" )

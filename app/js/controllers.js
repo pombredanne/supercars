@@ -28,7 +28,7 @@ function SupercarDetailsCtrl($scope, $location, $routeParams, Supercars) {
             });
         else
             $scope.supercar.$update(function(supercar) {
-                // update the list since it is possible to update the name
+                // update the list since the name might have been changed
                 $scope.$parent.supercars = Supercars.list();
                 $location.path('/supercars/' + supercar._id);
             });
