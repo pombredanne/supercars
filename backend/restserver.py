@@ -18,7 +18,6 @@ here = lambda x: os.path.abspath(os.path.join(os.path.dirname(__file__), x))
 
 __version__ = "0.1"
 SERVER_HOST = '0.0.0.0'
-SERVER_PORT = 8000
 SERVER_APIPREFIX = 'rest'
 SUPERCARS_FILE = here('supercars.json')
 
@@ -185,14 +184,16 @@ class RestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
 
 if __name__ == '__main__':
+    if len(sys.argv) == 1:
+        print "You need to provide a port number as 1st argument such as 8000!"
     server_class = BaseHTTPServer.HTTPServer
-    httpd = server_class((SERVER_HOST, SERVER_PORT), RestHandler)
-    print time.asctime(), "Server Starts - %s:%s" % (SERVER_HOST, SERVER_PORT)
-    if len(sys.argv) > 1:
-        os.chdir(sys.argv[1])
+    httpd = server_class((SERVER_HOST, int(sys.argv[1])), RestHandler)
+    print time.asctime(), "Server Starts - %s:%s" % (SERVER_HOST, sys.argv[1])
+    if len(sys.argv) > 2:
+        os.chdir(sys.argv[2])
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:
         pass
     httpd.server_close()
-    print time.asctime(), "Server Stops - %s:%s" % (SERVER_HOST, SERVER_PORT)
+    print time.asctime(), "Server Stops - %s:%s" % (SERVER_HOST, sys.argv[1])

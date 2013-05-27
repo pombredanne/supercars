@@ -30,7 +30,6 @@ def execute(ssh, script, targetdir, duration, arguments):
     '''execute the script'''
     ssh.exec_command('cd %s; nohup ./%s %s %s' % (targetdir, script, duration, ' '.join(arguments)))
 
-
 def usage():
     """
     Prints the script's usage guide.

@@ -1,7 +1,7 @@
-Ajax application ajaxdemo
-=========================
+Supercars Javascript application
+================================
 
-Ajax demo application implemented using AngularJS
+Supercars application implemented using AngularJS
 
 It is based on the AngularJS skeleton (https://github.com/angular/angular-seed).
 
@@ -42,8 +42,8 @@ To remove or delete a resource, use DELETE.
 This means using the HTTP protocol as it is intended.
 
 
-Installing ajaxdemo and tools
------------------------------
+Installing demo and tools
+-------------------------
 
 All you need is a Python installation.
 
@@ -58,8 +58,8 @@ Testacular comes with a watcher which runs the Jasmine unittests every time you 
 ./script/test.sh
 
 
-Run ajaxdemo
-------------
+Run the Supercars application
+-----------------------------
 
 python ./scripts/restserver.py
 
@@ -69,3 +69,15 @@ Visit the Supercars app
 
 Just point your browser to:
 http://localhost:8000/index.html
+
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-10252162-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
