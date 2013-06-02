@@ -16,6 +16,9 @@ Acknowledgements
 I started the Supercars application based on a skeleton taken from here:
 http://coenraets.org/blog/2012/02/sample-application-with-angular-js/
 
+The supercar images I got from Chris Barber:
+https://github.com/chrisbarber86/supercar
+
 Many thanks to cristatus from the Angularjs IRC channel. He helped me out debugging the supercars sample app.
 
 
@@ -69,15 +72,3 @@ Visit the Supercars app
 
 Just point your browser to:
 http://localhost:8000/index.html
-
-<script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-10252162-2']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-</script>

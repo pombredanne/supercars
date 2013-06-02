@@ -1,5 +1,4 @@
 'use strict';
-
 /* Controllers */
 
 function SupercarListCtrl($scope, $location, Supercars) {
