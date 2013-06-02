@@ -16,8 +16,7 @@ Acknowledgements
 I started the Supercars application based on a skeleton taken from here:
 http://coenraets.org/blog/2012/02/sample-application-with-angular-js/
 
-The supercar images I got from Chris Barber:
-https://github.com/chrisbarber86/supercar
+The supercar images are creative commons license mostly from wikipedia. Please refer to the included IMAGE_LICENSES file for details.
 
 Many thanks to cristatus from the Angularjs IRC channel. He helped me out debugging the supercars sample app.
 
