@@ -6,6 +6,7 @@ This is a demo REST server. Do not use this in production!
 
 import time
 import BaseHTTPServer
+import SocketServer
 import SimpleHTTPServer
 import urlparse
 import json
@@ -16,20 +17,17 @@ from collections import OrderedDict
 
 here = lambda x: os.path.abspath(os.path.join(os.path.dirname(__file__), x))
 
-__version__ = "0.1"
+__version__ = "0.1.1"
 SERVER_HOST = '0.0.0.0'
 SERVER_APIPREFIX = 'rest'
 SUPERCARS_FILE = here('supercars.json')
 
 
 class RestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
-    supercars = OrderedDict() #{}  # store the supercars
+    supercars = OrderedDict()  # store the supercars
     conf = {'seq': 1}  # unique id for the next supercar entry
 
     def __init__(self, *args, **kwargs):
-        #print 'moin'
-        #self.supercars = {}
-        #self.conf = {'seq': 1}  # unique id for the next supercar entry
         if not(len(self.supercars)):
             self.load_supercars(SUPERCARS_FILE)
         SimpleHTTPServer.SimpleHTTPRequestHandler.__init__(self, *args, **kwargs)
@@ -45,8 +43,7 @@ class RestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         # curl -X GET 'http://localhost:8000/rest/supercars/'
         url = urlparse.urlparse(self.path)
         path_elements = url.path.strip('/').split('/')
-        print 'path_elements: %s' % path_elements
-        print 'supercars: %s' % self.supercars
+        # print 'path_elements: %s' % path_elements
         if path_elements[0] != SERVER_APIPREFIX:
             SimpleHTTPServer.SimpleHTTPRequestHandler.do_GET(self)
         elif path_elements[1] != 'supercars':
@@ -84,7 +81,7 @@ class RestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
         url = urlparse.urlparse(self.path)
         path_elements = url.path.strip('/').split('/')
-        print 'path_elements: %s' % path_elements
+        # print 'path_elements: %s' % path_elements
         if path_elements[1] != 'supercars':
             self.send_error(404,
                 'Use existing /%s/supercars/_id for document access'
@@ -175,7 +172,6 @@ class RestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         """Load supercars from json file"""
         f = open(filename)
         data = json.loads("".join(f.readlines()))
-        #print 'data: %s' % data
         f.close()
         for d in data:
             oid = self.next_id()
@@ -183,11 +179,15 @@ class RestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
             self.supercars[oid] = d
 
 
+class SimpleThreadedServer(SocketServer.ThreadingMixIn,
+                   BaseHTTPServer.HTTPServer):
+    pass
+
+
 if __name__ == '__main__':
     if len(sys.argv) == 1:
         print "You need to provide a port number as 1st argument such as 8000!"
-    server_class = BaseHTTPServer.HTTPServer
-    httpd = server_class((SERVER_HOST, int(sys.argv[1])), RestHandler)
+    httpd = SimpleThreadedServer((SERVER_HOST, int(sys.argv[1])), RestHandler)
     print time.asctime(), "Server Starts - %s:%s" % (SERVER_HOST, sys.argv[1])
     if len(sys.argv) > 2:
         os.chdir(sys.argv[2])
